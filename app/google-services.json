@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "914389818817",
+    "firebase_url": "https://numad23project-default-rtdb.firebaseio.com",
+    "project_id": "numad23project",
+    "storage_bucket": "numad23project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914389818817:android:25849f77302aa0066d2340",
+        "android_client_info": {
+          "package_name": "edu.northeastern.fitfoodie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914389818817-jjla140p650bn9j7rctkejagrsvl9fhj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtZkkBxuJDJIPfroEDrlR6Zf89MjBlZlA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914389818817-jjla140p650bn9j7rctkejagrsvl9fhj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
