@@ -10,10 +10,10 @@
 
 
     <TextView
-        android:id="@+id/name_text_view"
+        android:id="@+id/username_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name:"
+        android:text="Username:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,12 +21,34 @@
         android:layout_marginStart="16dp" />
 
     <EditText
+        android:id="@+id/username_edit_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="mikeoffice"
+        app:layout_constraintStart_toEndOf="@+id/username_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/username_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/username_text_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/username_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/username_text_view"
+        android:layout_marginTop="32dp" />
+
+    <EditText
         android:id="@+id/name_edit_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Apurva Khatri"
         app:layout_constraintStart_toEndOf="@+id/name_text_view"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/username_edit_view"
         app:layout_constraintTop_toTopOf="@+id/name_text_view"
         app:layout_constraintBottom_toBottomOf="@+id/name_text_view"
         android:layout_marginEnd="16dp"

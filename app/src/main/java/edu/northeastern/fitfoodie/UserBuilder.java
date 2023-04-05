@@ -1,6 +1,7 @@
 package edu.northeastern.fitfoodie;
 
 public class UserBuilder {
+    String _username;
     String _name;
     String _gender;
     String _goalType;
@@ -14,7 +15,12 @@ public class UserBuilder {
     public UserBuilder(){}
 
     public User buildUser(){
-        return new User(_name, _gender, _goalType, _activityLevel, _age, _height, _weight, _calorieInTakeTarget);
+        return new User( _username, _name, _gender, _goalType, _activityLevel, _age, _height, _weight, _calorieInTakeTarget);
+    }
+
+    public UserBuilder username(String _username){
+        this._username = _username;
+        return this;
     }
 
     public UserBuilder name(String _name){

@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class SignUpOnClickListener extends AppCompatActivity implements View.OnClickListener {
         TextView username;
+        TextView name;
         Spinner gender;
         Spinner goalType;
         Spinner activityLevel;
@@ -39,10 +40,11 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
         //SignUpActivity thisContext;
 
 
-        SignUpOnClickListener(TextView username, Spinner gender, Spinner goalType,
+        SignUpOnClickListener(TextView username, TextView name, Spinner gender, Spinner goalType,
                               Spinner activityLevel, TextView age, TextView height,
                               TextView weight, TextView calorieInTakeTarget){
             this.username = username;
+            this.name = name;
             this.gender = gender;
             this.goalType = goalType;
             this.activityLevel = activityLevel;
@@ -63,7 +65,7 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         if (username.getText().toString().isEmpty()) {
             resetData();
-            Snackbar snack = Snackbar.make(v, "Please enter name!", Snackbar.LENGTH_LONG).setAction("Action", null);
+            Snackbar snack = Snackbar.make(v, "Please enter username!", Snackbar.LENGTH_LONG).setAction("Action", null);
             View snackView = snack.getView();
             TextView mTextView = snackView.findViewById(com.google.android.material.R.id.snackbar_text);
             mTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -75,7 +77,7 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("ON DATA CHANGE CALLED! ENTERED USERNAME: " + username.getText().toString());
+                System.out.println("ON DATA CHANGE CALLED! ENTERED Email: " + username.getText().toString());
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -89,7 +91,7 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
 
                 boolean recordExists = false;
                 for (User user : userList) {
-                    if (user.getName().equals(username.getText().toString())) {
+                    if (user.getUsername().equals(username.getText().toString())) {
                         recordExists = true;
                         break;
                     }
@@ -97,7 +99,7 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
 
                 // If the record exists, show an error message
                 if (recordExists) {
-                    Snackbar snack = Snackbar.make(v, "Username Taken!", Snackbar.LENGTH_LONG).setAction("Action", null);
+                    Snackbar snack = Snackbar.make(v, "Account already exists with this Email!", Snackbar.LENGTH_LONG).setAction("Action", null);
                     View snackView = snack.getView();
                     TextView mTextView = snackView.findViewById(com.google.android.material.R.id.snackbar_text);
                     mTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -105,7 +107,8 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
                 } else {
                     // Create a new record and add it to the list
                     User newUser = new UserBuilder()
-                            .name(username.getText().toString())
+                            .username(username.getText().toString())
+                            .name(name.getText().toString())
                             .gender(gender.getSelectedItem().toString())
                             .goalType(goalType.getSelectedItem().toString())
                             .activityLevel(activityLevel.getSelectedItem().toString())

@@ -1,6 +1,7 @@
 package edu.northeastern.fitfoodie;
 
 public class User {
+    String username;
     String name;
     String gender;
     String goalType;
@@ -15,7 +16,8 @@ public class User {
         //Required empty constructor.
     }
 
-    public User(String name, String gender, String goalType, String activityLevel, int age, int height, int weight, int calorieInTakeTarget) {
+    public User(String username, String name, String gender, String goalType, String activityLevel, int age, int height, int weight, int calorieInTakeTarget) {
+        this.username = username;
         this.name = name;
         this.gender = gender;
         this.goalType = goalType;
@@ -25,6 +27,7 @@ public class User {
         this.weight = weight;
         this.calorieInTakeTarget = calorieInTakeTarget;
     }
+    public String getUsername(){return username; }
 
     public String getName() {
         return name;

@@ -43,7 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
         configureActivitySpinner();
 
         Button signupButton = findViewById(R.id.sign_up_button);
-        signupButton.setOnClickListener(new SignUpOnClickListener(findViewById(R.id.name_edit_view),
+        signupButton.setOnClickListener(new SignUpOnClickListener(findViewById(R.id.username_edit_view),
+                findViewById(R.id.name_edit_view),
                 findViewById(R.id.gender_spinner),
                 findViewById(R.id.goal_spinner),
                 findViewById(R.id.activity_spinner),
@@ -120,12 +121,12 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    public void signUp(View v){
-
-
-        //Validate input can be implemented later
-        //validateInput(name, gender, goalType, activityLevel, age, height, weight, calorieInTakeTarget);
-    }
+//    public void signUp(View v){
+//
+//
+//        //Validate input can be implemented later
+//        //validateInput(name, gender, goalType, activityLevel, age, height, weight, calorieInTakeTarget);
+//    }
 
 
 }
