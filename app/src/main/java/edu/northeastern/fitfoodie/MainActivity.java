@@ -19,5 +19,12 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
             startActivity(intent);
         });
+
+        Button signInButton = findViewById(R.id.Sign_in);
+        signInButton.setOnClickListener(view ->
+        {
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+        });
     }
 }
