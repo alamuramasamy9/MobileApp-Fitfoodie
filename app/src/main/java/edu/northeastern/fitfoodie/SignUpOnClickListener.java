@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -38,11 +39,12 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
         TextView weight;
         TextView calorieInTakeTarget;
         //SignUpActivity thisContext;
+        private ImageView mProfileImageView;
 
 
         SignUpOnClickListener(TextView username, TextView name, Spinner gender, Spinner goalType,
                               Spinner activityLevel, TextView age, TextView height,
-                              TextView weight, TextView calorieInTakeTarget){
+                              TextView weight, TextView calorieInTakeTarget, ImageView profileImageView){
             this.username = username;
             this.name = name;
             this.gender = gender;
@@ -52,6 +54,7 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
             this.height = height;
             this.weight = weight;
             this.calorieInTakeTarget = calorieInTakeTarget;
+            this.mProfileImageView = profileImageView;
             //this.thisContext = t;
         }
 
