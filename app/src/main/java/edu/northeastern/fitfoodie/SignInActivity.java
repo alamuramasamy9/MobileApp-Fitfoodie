@@ -63,7 +63,7 @@ public class SignInActivity extends AppCompatActivity {
                             if (snapshot.exists()) {
                                 Log.println(Log.ASSERT, "Obj", "User with username does exist");
                                 Intent intent = new Intent(SignInActivity.this, Home.class);
-                                intent.putExtra("username", usernameView.getText().toString());
+                                intent.putExtra("currentUser", usernameView.getText().toString());
                                 startActivity(intent);
                             } else {
                                 Log.println(Log.ASSERT, "Obj", "User with username does not exist");

@@ -203,6 +203,8 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
                     new Handler().postDelayed(() -> {
                         Intent intent = new Intent(mContext, Home.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        // Add the username as an extra to the intent
+                        intent.putExtra("currentUser", newUser.getUsername());
                         mContext.startActivity(intent);
                     }, 1000); // 3000 milliseconds = 3 seconds
                 }
