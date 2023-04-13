@@ -59,10 +59,9 @@ public class SignUpActivity extends AppCompatActivity {
                 findViewById(R.id.height_edit_view),
                 findViewById(R.id.weight_edit_view),
                 findViewById(R.id.calorie_target_edit_view),
-                findViewById(R.id.profile_image_view)
+                findViewById(R.id.profile_image_view),
+                getApplicationContext()
         ));
-//        Intent intent = new Intent(SignUpActivity.this, Home.class);
-//        startActivity(intent);
 
         profileImageView = findViewById(R.id.profile_image_view);
         uploadButton = findViewById(R.id.upload_button);

@@ -12,11 +12,13 @@ public class User {
     int weight;
     int calorieInTakeTarget;
 
+    String profilePicUri;
+
     public User(){
         //Required empty constructor.
     }
 
-    public User(String username, String name, String gender, String goalType, String activityLevel, int age, int height, int weight, int calorieInTakeTarget) {
+    public User(String username, String name, String gender, String goalType, String activityLevel, int age, int height, int weight, int calorieInTakeTarget, String profilePicUri) {
         this.username = username;
         this.name = name;
         this.gender = gender;
@@ -26,6 +28,7 @@ public class User {
         this.height = height;
         this.weight = weight;
         this.calorieInTakeTarget = calorieInTakeTarget;
+        this.profilePicUri = profilePicUri;
     }
     public String getUsername(){return username; }
 
@@ -59,5 +62,14 @@ public class User {
 
     public int getCalorieInTakeTarget() {
         return calorieInTakeTarget;
+    }
+
+    // Getters and setters for the profile picture URI
+    public String getProfilePicUri() {
+        return profilePicUri;
+    }
+
+    public void setProfilePicUri(String profilePicUri) {
+        this.profilePicUri = profilePicUri;
     }
 }

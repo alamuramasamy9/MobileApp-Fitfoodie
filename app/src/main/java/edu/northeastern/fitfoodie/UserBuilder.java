@@ -1,5 +1,7 @@
 package edu.northeastern.fitfoodie;
 
+import android.net.Uri;
+
 public class UserBuilder {
     String _username;
     String _name;
@@ -11,11 +13,13 @@ public class UserBuilder {
     int _height;
     int _weight;
     int _calorieInTakeTarget;
+    String _profilePicUri;
+
 
     public UserBuilder(){}
 
     public User buildUser(){
-        return new User( _username, _name, _gender, _goalType, _activityLevel, _age, _height, _weight, _calorieInTakeTarget);
+        return new User( _username, _name, _gender, _goalType, _activityLevel, _age, _height, _weight, _calorieInTakeTarget, _profilePicUri);
     }
 
     public UserBuilder username(String _username){
@@ -60,6 +64,11 @@ public class UserBuilder {
 
     public UserBuilder calorieInTakeTarget(int _calorieInTakeTarget){
         this._calorieInTakeTarget = _calorieInTakeTarget;
+        return this;
+    }
+
+    public UserBuilder profilePicUri(String _profilePicUri){
+        this._profilePicUri = _profilePicUri;
         return this;
     }
 
