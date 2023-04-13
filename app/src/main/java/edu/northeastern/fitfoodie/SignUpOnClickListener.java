@@ -5,26 +5,41 @@ import static java.lang.Integer.parseInt;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class SignUpOnClickListener extends AppCompatActivity implements View.OnClickListener {
         TextView username;
@@ -37,12 +52,14 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
         TextView height;
         TextView weight;
         TextView calorieInTakeTarget;
-        //SignUpActivity thisContext;
+
+        private Context mContext;
+        private ImageView mProfileImageView;
 
 
         SignUpOnClickListener(TextView username, TextView name, Spinner gender, Spinner goalType,
                               Spinner activityLevel, TextView age, TextView height,
-                              TextView weight, TextView calorieInTakeTarget){
+                              TextView weight, TextView calorieInTakeTarget, ImageView profileImageView, Context mContext){
             this.username = username;
             this.name = name;
             this.gender = gender;
@@ -52,6 +69,8 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
             this.height = height;
             this.weight = weight;
             this.calorieInTakeTarget = calorieInTakeTarget;
+            this.mProfileImageView = profileImageView;
+            this.mContext = mContext;
             //this.thisContext = t;
         }
 
@@ -105,6 +124,35 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
                     mTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     snack.show();
                 } else {
+
+                    System.out.println("CREATING NEW USER!!!");
+
+                    // Get the Bitmap object from the ImageView
+                    mProfileImageView.setDrawingCacheEnabled(true);
+                    mProfileImageView.buildDrawingCache();
+                    Bitmap bitmap = mProfileImageView.getDrawingCache();
+
+                    // Save the bitmap to a file
+                    String fileName = "image.jpg";
+                    FileOutputStream outputStream = null;
+                    try {
+                        outputStream = mContext.openFileOutput("image.jpg", Context.MODE_PRIVATE);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                    try {
+                        outputStream.flush();
+                        outputStream.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    // Get the URI of the saved file
+                    Uri selectedImageUri = Uri.fromFile(mContext.getFileStreamPath(fileName));
+
+                    System.out.print("REACHED HERE, ABOUT TO CREATE NEW USER!");
+
                     // Create a new record and add it to the list
                     User newUser = new UserBuilder()
                             .username(username.getText().toString())
@@ -121,7 +169,28 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
 
                     userList.add(newUser);
 
-                    // Add the new record to the database
+                    // TODO: Upload the image
+                    // Get a reference to the Firebase Storage
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference();
+
+                    // Get a reference to the profile picture in Firebase Storage
+                    StorageReference profilePicRef = storageRef.child("profile_pics/" + username.getText().toString());
+
+                    // Upload the profile picture to Firebase Storage
+                    profilePicRef.putFile(selectedImageUri).addOnSuccessListener(taskSnapshot -> {
+                        // Get the download URL of the uploaded profile picture
+                        profilePicRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            // Add the download URL to the User object
+                            newUser.setProfilePicUri(uri.toString());
+
+                        });
+                    }).addOnFailureListener(exception -> {
+                        // Handle any errors that may occur while uploading the file
+                        Log.e(TAG, "Error uploading file", exception);
+                    });
+
+                    // Add the new user to the database
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
                     databaseReference.child(username.getText().toString()).setValue(newUser);
 
@@ -132,10 +201,11 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
                     mTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     snack.show();
                     new Handler().postDelayed(() -> {
-                        //Intent myIntent = getIntent();
-                        //Log.println(Log.ASSERT, TAG, thisContext.getPackageName());
-                        Intent intent = new Intent(SignUpOnClickListener.this, Home.class);
-                        startActivity(intent);
+                        Intent intent = new Intent(mContext, Home.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        // Add the username as an extra to the intent
+                        intent.putExtra("currentUser", newUser.getUsername());
+                        mContext.startActivity(intent);
                     }, 1000); // 3000 milliseconds = 3 seconds
                 }
             }
