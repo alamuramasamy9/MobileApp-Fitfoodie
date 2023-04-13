@@ -4,38 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home"
+    tools:context=".Workout"
     >
 
-    <TextView
-        android:id="@+id/quote"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="A little progress each day adds up to BIG results."
-        android:textSize="32dp"
-        android:background="@android:color/background_dark"
-        android:textColor="@android:color/holo_orange_dark"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
-
     <Button
-        android:id="@+id/workout_tracking"
+        android:id="@+id/cycling_workout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Workout Tracking"
+        android:text="Start Cycling"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
     />
 
     <Button
-        android:id="@+id/meal_tracking"
+        android:id="@+id/running_workout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Meal Tracking"
+        android:text="Start Running"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/workout_tracking"
-        />
-
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

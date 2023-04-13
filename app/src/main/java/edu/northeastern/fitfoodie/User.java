@@ -12,6 +12,10 @@ public class User {
     int weight;
     int calorieInTakeTarget;
 
+
+
+    WorkoutTracker[] workouts;
+
     public User(){
         //Required empty constructor.
     }
@@ -60,4 +64,6 @@ public class User {
     public int getCalorieInTakeTarget() {
         return calorieInTakeTarget;
     }
+
+    public WorkoutTracker[] getWorkouts() { return workouts;}
 }

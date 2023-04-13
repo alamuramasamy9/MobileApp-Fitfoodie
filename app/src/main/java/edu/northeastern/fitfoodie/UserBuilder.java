@@ -12,6 +12,8 @@ public class UserBuilder {
     int _weight;
     int _calorieInTakeTarget;
 
+    WorkoutTracker _workouts[];
+
     public UserBuilder(){}
 
     public User buildUser(){
@@ -60,6 +62,11 @@ public class UserBuilder {
 
     public UserBuilder calorieInTakeTarget(int _calorieInTakeTarget){
         this._calorieInTakeTarget = _calorieInTakeTarget;
+        return this;
+    }
+
+    public UserBuilder workouts(WorkoutTracker _workouts[]){
+        this._workouts = _workouts;
         return this;
     }
 

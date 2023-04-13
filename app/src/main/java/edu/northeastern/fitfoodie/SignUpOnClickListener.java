@@ -116,6 +116,7 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
                             .height(parseInt(height.getText().toString()))
                             .weight(parseInt(weight.getText().toString()))
                             .calorieInTakeTarget(parseInt(calorieInTakeTarget.getText().toString()))
+                            .workouts(new WorkoutTracker[]{}) //Empty workout initializer
                             .buildUser();
 
                     userList.add(newUser);
