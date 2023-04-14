@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,14 +22,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 public class SignUpActivity extends AppCompatActivity {
-    Spinner spinnerGender;
-    Spinner spinnerGoal;
-    Spinner spinnerActivity;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_FROM_GALLERY = 2;
@@ -36,35 +35,83 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageView profileImageView;
     private Button uploadButton;
 
+    TextView username;
+    TextView name;
+    Spinner gender;
+    Spinner goalType;
+    Spinner activityLevel;
+
+    TextView age;
+    TextView height;
+    TextView weight;
+    TextView calorieInTakeTarget;
+
+    protected Context mContext;
+    protected ImageView mProfileImageView;
+
+    //Keys for saving state
+    private static final String username_key = "distance";
+    private static final String name_key = "distance";
+    private static final String age_key = "distance";
+    private static final String height_key = "distance";
+    private static final String weight_key = "distance";
+    private static final String calorie_key = "distance";
+
+
+    private static final String gender_spinner_position = "spinner_position";
+    private static final String goal_spinner_position = "spinner_position";
+    private static final String activity_spinner_position = "spinner_position";
+
+
+
     @Override
     protected void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         setContentView(R.layout.sign_up_form);
 
-        spinnerGender = findViewById(R.id.gender_spinner);
-        spinnerGoal = findViewById(R.id.goal_spinner);
-        spinnerActivity = findViewById(R.id.activity_spinner);
+        username = findViewById(R.id.username_edit_view);
+        name =  findViewById(R.id.name_edit_view);
+        gender = findViewById(R.id.gender_spinner);
+        goalType = findViewById(R.id.goal_spinner);
+        activityLevel = findViewById(R.id.activity_spinner);
+        age = findViewById(R.id.age_edit_view);
+        height = findViewById(R.id.height_edit_view);
+        weight = findViewById(R.id.weight_edit_view);
+        calorieInTakeTarget = findViewById(R.id.calorie_target_edit_view);
+        profileImageView = findViewById(R.id.profile_image_view);
+        mContext = getApplicationContext();
+        uploadButton = findViewById(R.id.upload_button);
+
+        if (saveInstanceState != null) {
+            username.setText(saveInstanceState.getString("username_key"));
+            name.setText(saveInstanceState.getString("name_key"));
+            age.setText(saveInstanceState.getString("age_key"));
+            height.setText(saveInstanceState.getString("height_key"));
+            weight.setText(saveInstanceState.getString("weight_key"));
+            calorieInTakeTarget.setText(saveInstanceState.getString("calorie_key"));
+            gender.setSelection(saveInstanceState.getInt("gender_spinner_position"));
+            goalType.setSelection(saveInstanceState.getInt("goal_spinner_position"));
+            activityLevel.setSelection(saveInstanceState.getInt("activityLevel_spinner_position"));
+        }
 
         configureGenderSpinner();
         configureGoalSpinner();
         configureActivitySpinner();
 
         Button signupButton = findViewById(R.id.sign_up_button);
-        signupButton.setOnClickListener(new SignUpOnClickListener(findViewById(R.id.username_edit_view),
-                findViewById(R.id.name_edit_view),
-                findViewById(R.id.gender_spinner),
-                findViewById(R.id.goal_spinner),
-                findViewById(R.id.activity_spinner),
-                findViewById(R.id.age_edit_view),
-                findViewById(R.id.height_edit_view),
-                findViewById(R.id.weight_edit_view),
-                findViewById(R.id.calorie_target_edit_view),
-                findViewById(R.id.profile_image_view),
-                getApplicationContext()
+        signupButton.setOnClickListener(new SignUpOnClickListener(
+                username,
+                name,
+                gender,
+                goalType,
+                activityLevel,
+                age,
+                height,
+                weight,
+                calorieInTakeTarget,
+                profileImageView,
+                mContext
         ));
-
-        profileImageView = findViewById(R.id.profile_image_view);
-        uploadButton = findViewById(R.id.upload_button);
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,13 +170,29 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outputState){
+        super.onSaveInstanceState(outputState);
+        outputState.putString(username_key, String.valueOf(username.getText()));
+        outputState.putString(name_key, String.valueOf(name.getText()));
+        outputState.putString(age_key, String.valueOf(age.getText()));
+        outputState.putString(height_key, String.valueOf(height.getText()));
+        outputState.putString(weight_key, String.valueOf(weight.getText()));
+        outputState.putString(calorie_key, String.valueOf(calorieInTakeTarget.getText()));
+        outputState.putInt(gender_spinner_position, gender.getSelectedItemPosition());
+        outputState.putInt(goal_spinner_position, goalType.getSelectedItemPosition());
+        outputState.putInt(activity_spinner_position, activityLevel.getSelectedItemPosition());
+    }
+
+
+
     void configureGenderSpinner(){
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_options, android.R.layout.simple_spinner_item);
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
 
-        spinnerGender.setAdapter(genderAdapter);
+        gender.setAdapter(genderAdapter);
 
-        spinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("Choose Gender")){
@@ -148,9 +211,9 @@ public class SignUpActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> goalAdapter = ArrayAdapter.createFromResource(this, R.array.goal_options, android.R.layout.simple_spinner_item);
         goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
 
-        spinnerGoal.setAdapter(goalAdapter);
+        goalType.setAdapter(goalAdapter);
 
-        spinnerGoal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        goalType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("Choose Goal Type")){
@@ -169,9 +232,9 @@ public class SignUpActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> activityAdapter = ArrayAdapter.createFromResource(this, R.array.activity_options, android.R.layout.simple_spinner_item);
         activityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
 
-        spinnerActivity.setAdapter(activityAdapter);
+        activityLevel.setAdapter(activityAdapter);
 
-        spinnerActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        activityLevel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("Choose Activity")){

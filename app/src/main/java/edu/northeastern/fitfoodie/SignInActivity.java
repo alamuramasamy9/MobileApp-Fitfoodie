@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class SignInActivity extends AppCompatActivity {
     private EditText usernameView;
+    private static final String username_key = "distance";
 
     @Override
     protected void onCreate(Bundle saveInstanceState) {
@@ -34,6 +35,10 @@ public class SignInActivity extends AppCompatActivity {
         Button signInButton = findViewById(R.id.sign_in_button);
 
         usernameView = findViewById(R.id.username_signIn_edit_view);
+
+        if (saveInstanceState != null) {
+            usernameView.setText(saveInstanceState.getString("username_key"));
+        }
 
         signInButton.setOnClickListener(
                 view -> {
@@ -82,6 +87,11 @@ public class SignInActivity extends AppCompatActivity {
 
                 });
 
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outputState){
+        super.onSaveInstanceState(outputState);
+        outputState.putString(username_key, String.valueOf(usernameView.getText()));
     }
 
     private void resetData() {

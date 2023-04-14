@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -41,21 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class SignUpOnClickListener extends AppCompatActivity implements View.OnClickListener {
-        TextView username;
-        TextView name;
-        Spinner gender;
-        Spinner goalType;
-        Spinner activityLevel;
-
-        TextView age;
-        TextView height;
-        TextView weight;
-        TextView calorieInTakeTarget;
-
-        private Context mContext;
-        private ImageView mProfileImageView;
-
+public class SignUpOnClickListener extends SignUpActivity implements View.OnClickListener {
 
         SignUpOnClickListener(TextView username, TextView name, Spinner gender, Spinner goalType,
                               Spinner activityLevel, TextView age, TextView height,
