@@ -12,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,7 +37,9 @@ public class Running extends RunningVariables implements LocationListener {
         averageSpeedView = findViewById(R.id.average_attribute);
         endRunning = findViewById(R.id.end_attribute);
         endRunning.setOnClickListener(new InnerEndRunningListener());
-        workoutObject = new WorkoutTracker("RUNNING", startTime, endTime, avgSpeed, distance, workoutDate);
+        Log.println(Log.ASSERT, "ST", String.valueOf(startTime));
+
+        workoutObject = new WorkoutTracker("RUNNING", String.valueOf(startTime), String.valueOf(endTime), avgSpeed, distance, workoutDate);
 
         endRunning.setOnClickListener(new InnerEndRunningListener());
 
@@ -128,15 +132,17 @@ public class Running extends RunningVariables implements LocationListener {
     public void onLocationChanged(@NonNull Location location) {
         if(pointLocation!=null){
             distance+=pointLocation.distanceTo(location);
-            endTime = String.valueOf(Calendar.getInstance().getTime());
+            endTime = Calendar.getInstance().getTime();
             avgSpeed = 0;
             UpdateObject();
             //Implement averageSpeed = distance/(endTime-startTime);
         }
-        distanceView.setText("Distance Covered: " + ConvertToKM(distance) + " kms");
-        timeView.setText("Time Spent: 00:00:00");
+        distanceView.setText("Distance Covered: " + workoutObject.distance + " kms");
+
         //Implement subtract time
-        averageSpeedView.setText("Average Speed: 10.00 M/H");
+        timeView.setText("Time Spent: " + getTimeDifference());
+        averageSpeedView.setText("Average Speed: " + workoutObject.averageSpeed+ "Km/H");
+        pointLocation = location;
         //Implement average in miles
     }
 
@@ -146,13 +152,39 @@ public class Running extends RunningVariables implements LocationListener {
         locationManager.removeUpdates(this);
     }
 
-    private double ConvertToKM(double distance){ return distance/100;}
 
     private Boolean UpdateObject(){
-        workoutObject.setEndTime(endTime);
-        workoutObject.setDistance(distance);
-        workoutObject.setAverageSpeed(avgSpeed);
+        workoutObject.setEndTime(String.valueOf(Calendar.getInstance().getTime()));
+        workoutObject.setDistance(ConvertToKM(distance));
+        workoutObject.setAverageSpeed(getAverageSpeedInString());
         return true;
+    }
+    private double ConvertToKM(double distance){ return distance/100;}
+
+    private String getTimeDifference(){
+        long sTInSecs = startTime.getTime()/1000;
+        long eTInSecs = endTime.getTime()/1000;
+        return calculateTime(sTInSecs, eTInSecs);
+    }
+
+    private String calculateTime(long sTInSecs, long eTInSecs){
+        long stHours = sTInSecs/3600;
+        long stMins = (sTInSecs%3600) / 60;
+        long stSecs = sTInSecs%60;
+        //String sT = stHours + ":" + stMins + ":" + stSecs;
+        long etHours = eTInSecs/3600;
+        long etMins = (eTInSecs%3600) / 60;
+        long etSecs = eTInSecs%60;
+        //String eT = etHours + ":" + etMins + ":" + etSecs;
+        return String.valueOf(etHours-stHours) + ":"
+                + String.valueOf(etMins - stMins) + ":"
+                + String.valueOf(etSecs - stSecs);
+    }
+
+    private double getAverageSpeedInString(){
+        long sTInSecs = startTime.getTime()/1000;
+        long eTInSecs = endTime.getTime()/1000;
+        return (distance/100) / (eTInSecs - sTInSecs);
     }
 
     public class InnerEndRunningListener implements View.OnClickListener{

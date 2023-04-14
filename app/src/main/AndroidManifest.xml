@@ -37,6 +37,8 @@
         <activity android:name=".Home"/>
         <activity android:name=".SignUpOnClickListener"/>
         <activity android:name=".SignInActivity"/>
+        <activity android:name=".Workout"/>
+        <activity android:name=".Running"/>
     </application>
 
 </manifest>

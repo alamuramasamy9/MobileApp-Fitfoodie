@@ -74,6 +74,8 @@ public class SignUpOnClickListener extends AppCompatActivity implements View.OnC
             //this.thisContext = t;
         }
 
+        SignUpOnClickListener(){} //Empty Constructor required
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         Map<String, User> users = new HashMap<>();
         DatabaseReference usersRef = databaseReference.child("Users");
