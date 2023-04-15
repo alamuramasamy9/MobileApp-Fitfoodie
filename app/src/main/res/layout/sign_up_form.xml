@@ -11,10 +11,14 @@
     android:id="@+id/gender"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sign_up_form_background"
     tools:context=".SignUpActivity">
 
-
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sign_up_form_background" />
 
     <ImageView
         android:id="@+id/profile_image_view"
