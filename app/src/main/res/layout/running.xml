@@ -7,30 +7,49 @@
     tools:context=".Running"
     >
 
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/running" />
+
+
     <TextView
         android:id="@+id/distance_attribute"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Distance Covered: 0.0 kms"
-        android:textSize="32dp"
+        android:text="Distance Covered: 0.00 KM/S"
+        android:textSize="25dp"
+        android:textColor="#00FF00"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/time_attribute"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Time Spent: 00:00:00"
-        android:textSize="32dp"
+        android:textSize="25dp"
+        android:textColor="#00FF00"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/distance_attribute"
         app:layout_constraintTop_toBottomOf="@+id/distance_attribute"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/average_attribute"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Average Speed: 00.00 M/H"
-        android:textSize="32dp"
+        android:text="Average Speed: 00.00 KM/H"
+        android:textSize="25dp"
+        android:textColor="#00FF00"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/time_attribute"
         app:layout_constraintTop_toBottomOf="@+id/time_attribute"
         tools:ignore="MissingConstraints" />
 
@@ -40,6 +59,8 @@
         android:layout_height="wrap_content"
         android:text="End Running"
         app:layout_constraintTop_toBottomOf="@id/average_attribute"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
 
