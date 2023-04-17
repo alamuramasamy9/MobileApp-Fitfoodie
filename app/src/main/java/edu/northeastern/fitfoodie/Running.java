@@ -4,34 +4,42 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import java.time.LocalDate;
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.Calendar;
-import java.util.Date;
 
 public class Running extends RunningVariables implements LocationListener {
+
+    private String currentUser;
+
+    private CountDownTimer timer;
 
     @SuppressLint("DefaultLocale")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.running);
+
+        ImageView runningGif = findViewById(R.id.running_gif);
+        Glide.with(this).asGif().load(R.drawable.runningicon).into(runningGif);
+
+        currentUser = getIntent().getStringExtra("currentUser");
+        resetButton = findViewById(R.id.reset_attribute);
+
         distanceView = findViewById(R.id.distance_attribute);
         timeView = findViewById(R.id.time_attribute);
         averageSpeedView = findViewById(R.id.average_attribute);
@@ -47,6 +55,15 @@ public class Running extends RunningVariables implements LocationListener {
             distance = savedInstanceState.getDouble(distance_key);
             distanceView.setText(String.format("Distance Covered: %.2f kms", ConvertToKM(distance)));
         }
+
+        resetButton.setOnClickListener(v -> {
+            distance = 0.0;
+            distanceView.setText("Distance Covered: 0.00 kms");
+            timeView.setText("Time Spent: 00:00:00");
+            averageSpeedView.setText(String.format("Average Speed: %.2f M/H", 0.0));
+        });
+        timeView.setText("Time Spent: 00:00:00");
+        startTimer();
     }
 
     @Override
@@ -87,15 +104,15 @@ public class Running extends RunningVariables implements LocationListener {
     @Override
     public void onBackPressed(){
         new AlertDialog.Builder(this)
-                .setTitle("Back Requested")
-                .setMessage("Activity will be marked as completed and will not resume.")
+                .setTitle("Exit Pressed")
+                .setMessage("Current Running Session will be marked completed. Are you sure?")
                 .setPositiveButton("Yes", ((dialog, which) -> new InnerEndRunningListener()))
                 .setNegativeButton("No", null)
                 .show();
     }
 
     private void locationSettings() {
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        System.out.println("SHOULD START TRACKING LOCATION UPDATES!");
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -106,44 +123,26 @@ public class Running extends RunningVariables implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
-
-//    private void requestGPS() {
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-//            }
-//        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//            }
-//        });
-//        final AlertDialog alertDialog = builder.create();
-//        alertDialog.show();
-//    }
-
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        if(pointLocation!=null){
-            distance+=pointLocation.distanceTo(location);
-            endTime = Calendar.getInstance().getTime();
-            avgSpeed = 0;
+        if (pointLocation != null) {
+            long timeDiff = (location.getTime() - pointLocation.getTime()) / 1000; // in seconds
+            double distanceInMiles = ConvertToMiles(distance);
+            avgSpeed = distanceInMiles / ((double) timeDiff / 3600);
             UpdateObject();
-            //Implement averageSpeed = distance/(endTime-startTime);
         }
-        distanceView.setText("Distance Covered: " + workoutObject.distance + " kms");
-
-        //Implement subtract time
-        timeView.setText("Time Spent: " + getTimeDifference());
-        averageSpeedView.setText("Average Speed: " + workoutObject.averageSpeed+ "Km/H");
         pointLocation = location;
-        //Implement average in miles
+        distanceView.setText(String.format("Distance Covered: %.2f kms", ConvertToKM(distance)));
+        averageSpeedView.setText(String.format("Average Speed: %.2f M/H", avgSpeed));
+    }
+
+    private double ConvertToMiles(double distanceInMeters) {
+        return distanceInMeters / 1609.344;
     }
 
     @Override
@@ -191,11 +190,31 @@ public class Running extends RunningVariables implements LocationListener {
 
         @Override
         public void onClick(View v) {
-            //Fetch the user [TO DO]
+            DatabaseReference userRef = databaseReference.child("Users").child(currentUser);
+
             //Add the workout tracker object to the user's workout's records. [TO DO]
+
+            // Calculate calories burnt using a formula (example formula)
+            double caloriesBurnt = distance * 0.63;
+
 
             //Update using Firebase Ref
         }
+    }
+
+    private void startTimer() {
+        timer = new CountDownTimer(Long.MAX_VALUE, 1000) {
+            public void onTick(long millisUntilFinished) {
+                long seconds = (millisUntilFinished / 1000) % 60;
+                long minutes = (millisUntilFinished / (1000 * 60)) % 60;
+                long hours = (millisUntilFinished / (1000 * 60 * 60)) % 24;
+                String time = String.format("Time Spent: %02d:%02d:%02d", hours, minutes, seconds);
+                timeView.setText(time);
+            }
+            public void onFinish() {
+                // handle timer finish event
+            }
+        }.start();
     }
 }
 

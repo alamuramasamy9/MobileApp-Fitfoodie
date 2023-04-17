@@ -13,10 +13,13 @@ public class Workout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.workout_tracker);
 
+        String username = getIntent().getStringExtra("currentUser");
+
         Button runningWorkout = findViewById(R.id.running_workout);
         runningWorkout.setOnClickListener(view ->
         {
             Intent intent = new Intent(Workout.this, Running.class);
+            intent.putExtra("currentUser", username);
             startActivity(intent);
         });
 
@@ -24,6 +27,7 @@ public class Workout extends AppCompatActivity {
         cyclingWorkout.setOnClickListener(view ->
         {
             Intent intent = new Intent(Workout.this, Cycling.class);
+            intent.putExtra("currentUser", username);
             startActivity(intent);
         });
 

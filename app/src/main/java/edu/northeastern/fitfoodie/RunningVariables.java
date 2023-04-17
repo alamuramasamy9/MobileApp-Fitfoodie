@@ -32,6 +32,9 @@ public class RunningVariables extends AppCompatActivity {
     TextView timeView;
     TextView averageSpeedView;
     Button endRunning;
+
+    Button resetButton;
+
     double distance = 0.0F;
     //LocalTime startTime = LocalTime.now();
     Date startTime = Calendar.getInstance().getTime();

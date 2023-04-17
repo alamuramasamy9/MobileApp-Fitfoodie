@@ -114,8 +114,6 @@ public class SignUpOnClickListener extends SignUpActivity implements View.OnClic
                     snack.show();
                 } else {
 
-                    System.out.println("CREATING NEW USER!!!");
-
                     // Get the Bitmap object from the ImageView
                     mProfileImageView.setDrawingCacheEnabled(true);
                     mProfileImageView.buildDrawingCache();
