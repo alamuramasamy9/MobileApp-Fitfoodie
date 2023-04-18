@@ -123,7 +123,10 @@ public class Running extends RunningVariables implements LocationListener {
         new AlertDialog.Builder(this)
                 .setTitle("Exit Pressed")
                 .setMessage("Current Running Session will be marked completed. Are you sure?")
-                .setPositiveButton("Yes", ((dialog, which) -> new InnerEndRunningListener(this)))
+                .setPositiveButton("Yes", ((dialog, which) -> {
+                    InnerEndRunningListener listener = new InnerEndRunningListener(this);
+                    listener.onClick(null); // pass a null view to onClick method
+                }))
                 .setNegativeButton("No", null)
                 .show();
     }
