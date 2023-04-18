@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Home extends AppCompatActivity {
     private Button workoutButton;
+    private Button userProfileButton;
     private TextView quoteView;
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -25,6 +26,13 @@ public class Home extends AppCompatActivity {
         workoutButton = findViewById(R.id.workout_tracking);
         workoutButton.setOnClickListener(v -> {
             Intent intent = new Intent(Home.this, Workout.class);
+            intent.putExtra("currentUser", username);
+            startActivity(intent);
+        });
+
+        userProfileButton = findViewById(R.id.user_profile);
+        userProfileButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Home.this, UserProfile.class);
             intent.putExtra("currentUser", username);
             startActivity(intent);
         });

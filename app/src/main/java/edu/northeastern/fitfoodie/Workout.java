@@ -31,5 +31,13 @@ public class Workout extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button workoutHistory = findViewById(R.id.workout_history);
+        workoutHistory.setOnClickListener(view ->
+        {
+            Intent intent = new Intent(Workout.this, WorkoutHistory.class);
+            intent.putExtra("currentUser", username);
+            startActivity(intent);
+        });
+
     }
 }

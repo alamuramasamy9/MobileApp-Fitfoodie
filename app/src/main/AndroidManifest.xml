@@ -39,6 +39,9 @@
         <activity android:name=".SignInActivity"/>
         <activity android:name=".Workout"/>
         <activity android:name=".Running"/>
+        <activity android:name=".Cycling"/>
+        <activity android:name=".WorkoutHistory"/>
+        <activity android:name=".UserProfile"/>
     </application>
 
 </manifest>

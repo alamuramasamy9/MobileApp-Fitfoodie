@@ -1,5 +1,7 @@
 package edu.northeastern.fitfoodie;
 
+import java.util.ArrayList;
+
 public class User {
     String username;
     String name;
@@ -14,7 +16,7 @@ public class User {
 
 
 
-    WorkoutTracker[] workouts;
+    ArrayList<WorkoutTracker> workouts;
 
     String profilePicUri;
 
@@ -68,7 +70,10 @@ public class User {
         return calorieInTakeTarget;
     }
 
-    public WorkoutTracker[] getWorkouts() { return workouts;}
+    public ArrayList<WorkoutTracker> getWorkouts() {
+        return workouts;
+    }
+
 
     // Getters and setters for the profile picture URI
     public String getProfilePicUri() {
