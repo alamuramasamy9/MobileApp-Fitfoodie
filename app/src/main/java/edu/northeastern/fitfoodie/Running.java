@@ -1,32 +1,47 @@
 package edu.northeastern.fitfoodie;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Running extends RunningVariables implements LocationListener {
 
     private String currentUser;
 
     private CountDownTimer timer;
+
+    private long elapsedTime = 0;
+    private boolean isTimerRunning = false;
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -35,7 +50,7 @@ public class Running extends RunningVariables implements LocationListener {
         setContentView(R.layout.running);
 
         ImageView runningGif = findViewById(R.id.running_gif);
-        Glide.with(this).asGif().load(R.drawable.runningicon).into(runningGif);
+        Glide.with(this).asGif().load(R.drawable.running).into(runningGif);
 
         currentUser = getIntent().getStringExtra("currentUser");
         resetButton = findViewById(R.id.reset_attribute);
@@ -44,12 +59,12 @@ public class Running extends RunningVariables implements LocationListener {
         timeView = findViewById(R.id.time_attribute);
         averageSpeedView = findViewById(R.id.average_attribute);
         endRunning = findViewById(R.id.end_attribute);
-        endRunning.setOnClickListener(new InnerEndRunningListener());
+        endRunning.setOnClickListener(new InnerEndRunningListener(this));
         Log.println(Log.ASSERT, "ST", String.valueOf(startTime));
 
-        workoutObject = new WorkoutTracker("RUNNING", String.valueOf(startTime), String.valueOf(endTime), avgSpeed, distance, workoutDate);
+        workoutObject = new WorkoutTracker("RUNNING", String.valueOf(startTime), String.valueOf(endTime), avgSpeed, distance, workoutDate, 0, 0);
 
-        endRunning.setOnClickListener(new InnerEndRunningListener());
+        endRunning.setOnClickListener(new InnerEndRunningListener(this));
 
         if (savedInstanceState != null) {
             distance = savedInstanceState.getDouble(distance_key);
@@ -58,9 +73,11 @@ public class Running extends RunningVariables implements LocationListener {
 
         resetButton.setOnClickListener(v -> {
             distance = 0.0;
+            elapsedTime = 0;
             distanceView.setText("Distance Covered: 0.00 kms");
             timeView.setText("Time Spent: 00:00:00");
             averageSpeedView.setText(String.format("Average Speed: %.2f M/H", 0.0));
+            startTimer();
         });
         timeView.setText("Time Spent: 00:00:00");
         startTimer();
@@ -106,21 +123,19 @@ public class Running extends RunningVariables implements LocationListener {
         new AlertDialog.Builder(this)
                 .setTitle("Exit Pressed")
                 .setMessage("Current Running Session will be marked completed. Are you sure?")
-                .setPositiveButton("Yes", ((dialog, which) -> new InnerEndRunningListener()))
+                .setPositiveButton("Yes", ((dialog, which) -> {
+                    InnerEndRunningListener listener = new InnerEndRunningListener(this);
+                    listener.onClick(null); // pass a null view to onClick method
+                }))
                 .setNegativeButton("No", null)
                 .show();
     }
 
     private void locationSettings() {
         System.out.println("SHOULD START TRACKING LOCATION UPDATES!");
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
             return;
         }
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -151,7 +166,6 @@ public class Running extends RunningVariables implements LocationListener {
         locationManager.removeUpdates(this);
     }
 
-
     private Boolean UpdateObject(){
         workoutObject.setEndTime(String.valueOf(Calendar.getInstance().getTime()));
         workoutObject.setDistance(ConvertToKM(distance));
@@ -159,26 +173,6 @@ public class Running extends RunningVariables implements LocationListener {
         return true;
     }
     private double ConvertToKM(double distance){ return distance/100;}
-
-    private String getTimeDifference(){
-        long sTInSecs = startTime.getTime()/1000;
-        long eTInSecs = endTime.getTime()/1000;
-        return calculateTime(sTInSecs, eTInSecs);
-    }
-
-    private String calculateTime(long sTInSecs, long eTInSecs){
-        long stHours = sTInSecs/3600;
-        long stMins = (sTInSecs%3600) / 60;
-        long stSecs = sTInSecs%60;
-        //String sT = stHours + ":" + stMins + ":" + stSecs;
-        long etHours = eTInSecs/3600;
-        long etMins = (eTInSecs%3600) / 60;
-        long etSecs = eTInSecs%60;
-        //String eT = etHours + ":" + etMins + ":" + etSecs;
-        return String.valueOf(etHours-stHours) + ":"
-                + String.valueOf(etMins - stMins) + ":"
-                + String.valueOf(etSecs - stSecs);
-    }
 
     private double getAverageSpeedInString(){
         long sTInSecs = startTime.getTime()/1000;
@@ -188,26 +182,95 @@ public class Running extends RunningVariables implements LocationListener {
 
     public class InnerEndRunningListener implements View.OnClickListener{
 
+        private Context mContext;
+
+        public InnerEndRunningListener(Context context) {
+            mContext = context;
+        }
+
         @Override
         public void onClick(View v) {
+            stopTimer();
+            final double[] weight = new double[1];
             DatabaseReference userRef = databaseReference.child("Users").child(currentUser);
+            userRef.child("weight").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    weight[0] = snapshot.getValue(Double.class);
+                    // UPDATE WORKOUT OBJECT
+                    workoutObject.setEndTime(String.valueOf(Calendar.getInstance().getTime()));
+                    workoutObject.setWorkoutDuration(elapsedTime/1000);
+                    workoutObject.setDistance(distance);
 
-            //Add the workout tracker object to the user's workout's records. [TO DO]
+                    double caloriesBurnt = calculateCaloriesBurnt(elapsedTime/1000, avgSpeed, distance, weight[0]);
+                    workoutObject.setCaloriesBurnt(caloriesBurnt);
+                    workoutObject.setAverageSpeed(avgSpeed);
 
-            // Calculate calories burnt using a formula (example formula)
-            double caloriesBurnt = distance * 0.63;
+                    // Update using Firebase Ref
+                    userRef.child("Workouts").push().setValue(workoutObject, (error, ref) -> {
+                        if (error != null) {
+                            // Handle error
+                            Log.e(TAG, "Data could not be saved: " + error.getMessage());
+                        } else {
+                            // Handle success
+                            Log.d(TAG, "Data saved successfully.");
+                        }
+                    });
+                }
 
-
-            //Update using Firebase Ref
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle error
+                }
+            });
+            //TODO: REDIRECT TO WORKOUT SCREEN PROPERLY
+            Intent intent = new Intent(Running.this, Workout.class);
+            startActivity(intent);
+            finish();
         }
     }
 
+    public static double calculateCaloriesBurnt(double durationInSeconds, double averageSpeedInMph, double distanceInKm, double weightInKg) {
+        // Convert average speed from mph to km/h
+        double averageSpeedInKmh = averageSpeedInMph * 1.60934;
+
+        // Calculate MET value based on average speed
+        double metValue;
+        if (averageSpeedInKmh <= 8.0) {
+            metValue = 4.0;
+        } else if (averageSpeedInKmh <= 16.0) {
+            metValue = 6.0;
+        } else if (averageSpeedInKmh <= 19.2) {
+            metValue = 8.0;
+        } else {
+            metValue = 10.0;
+        }
+
+        // Calculate calories burnt based on duration, distance, and MET value
+        double caloriesPerHour = metValue * weightInKg;
+        double durationInHours = durationInSeconds / 3600.0;
+        double caloriesBurnt = caloriesPerHour * durationInHours;
+
+        // Adjust calories burnt based on distance
+        if(distanceInKm != 0) {
+            double caloriesPerKm = caloriesBurnt / distanceInKm;
+            System.out.println("CALORIES PER KM CALC: " + caloriesPerKm);
+            return caloriesPerKm * distanceInKm;
+        }
+        else {
+            return 0;
+        }
+
+    }
+
     private void startTimer() {
+        isTimerRunning = true;
         timer = new CountDownTimer(Long.MAX_VALUE, 1000) {
             public void onTick(long millisUntilFinished) {
-                long seconds = (millisUntilFinished / 1000) % 60;
-                long minutes = (millisUntilFinished / (1000 * 60)) % 60;
-                long hours = (millisUntilFinished / (1000 * 60 * 60)) % 24;
+                elapsedTime += 1000;
+                long seconds = (elapsedTime / 1000) % 60;
+                long minutes = (elapsedTime / (1000 * 60)) % 60;
+                long hours = (elapsedTime / (1000 * 60 * 60)) % 24;
                 String time = String.format("Time Spent: %02d:%02d:%02d", hours, minutes, seconds);
                 timeView.setText(time);
             }
@@ -215,6 +278,13 @@ public class Running extends RunningVariables implements LocationListener {
                 // handle timer finish event
             }
         }.start();
+    }
+
+    private void stopTimer() {
+        if (isTimerRunning) {
+            isTimerRunning = false;
+            timer.cancel();
+        }
     }
 }
 
