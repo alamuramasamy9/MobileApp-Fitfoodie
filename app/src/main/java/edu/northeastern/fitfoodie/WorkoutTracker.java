@@ -33,4 +33,27 @@ public class WorkoutTracker {
     public void setAverageSpeed(double averageSpeed) {
         this.averageSpeed = averageSpeed;
     }
+    public String getType() {
+        return type;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public Date getWorkoutDate() {
+        return workoutDate;
+    }
+
+    public double getAverageSpeed() {
+        return averageSpeed;
+    }
 }
