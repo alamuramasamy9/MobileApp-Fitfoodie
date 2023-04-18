@@ -1,10 +1,10 @@
 package edu.northeastern.fitfoodie;
 
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,64 +13,68 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class WorkoutHistory extends AppCompatActivity {
-    private LinearLayout linearLayout;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.workout_history);
 
-        linearLayout = findViewById(R.id.linear_layout);
-        List<WorkoutTracker> workoutObjects = fetchMyObjects(getIntent().getStringExtra("currentUser"));
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // create a TextView for each MyObject object, and add it to the linear layout
-        for (WorkoutTracker workoutObject : workoutObjects) {
-            TextView textViewType = new TextView(this);
-            TextView textViewStartTime = new TextView(this);
-            TextView textViewEndTime = new TextView(this);
-            TextView textViewDistance = new TextView(this);
-            TextView textViewAvgSpeed = new TextView(this);
+        String username = getIntent().getStringExtra("currentUser");
 
-
-            textViewType.setText(workoutObject.getType());
-            textViewStartTime.setText("Start Time:"  + workoutObject.getStartTime());
-            textViewEndTime.setText("End Time:"  + workoutObject.getEndTime());
-            textViewDistance.setText("Distance: " + (int) workoutObject.getDistance());
-            textViewAvgSpeed.setText("Average Speed: " + workoutObject.getType());
-
-            linearLayout.addView(textViewType);
-            linearLayout.addView(textViewStartTime);
-            linearLayout.addView(textViewEndTime);
-            linearLayout.addView(textViewDistance);
-            linearLayout.addView(textViewAvgSpeed);
-        }
+        fetchMyObjects(username, workoutList -> {
+            System.out.println("Workouts Obtained: " + workoutList);
+            // create a WorkoutAdapter with the workoutList, and set it as the RecyclerView's adapter
+            WorkoutAdapter adapter = new WorkoutAdapter(workoutList);
+            recyclerView.setAdapter(adapter);
+        });
     }
 
-    private List<WorkoutTracker> fetchMyObjects(String username) {
+    public interface WorkoutListCallback {
+        void onWorkoutListFetched(List<WorkoutTracker> workoutList);
+    }
+
+    private void fetchMyObjects(String username, WorkoutListCallback callback) {
         // implement this method to fetch a list of MyObject objects
         // for example, from a database
         List<WorkoutTracker> workoutList = new ArrayList<>();
 
-
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference usersRef = databaseReference.child("Users").child(username).child("Workouts");
+        DatabaseReference workoutRef = databaseReference.child("Users").child(username).child("Workouts");
 
-        usersRef.addValueEventListener(new ValueEventListener() {
+        workoutRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Retrieve the user data as a User object
-                WorkoutTracker wt = dataSnapshot.getValue(WorkoutTracker.class);
-                for (WorkoutTracker workout : wt) {
-                    if (user.getUsername().equals(username.getText().toString())) {
-                        recordExists = true;
-                        break;
-                    }
+                // Retrieve the workout data from firebase
+                Iterable<DataSnapshot> workoutChildren = dataSnapshot.getChildren();
+
+                for (DataSnapshot workoutSnapshot : workoutChildren) {
+                    String workoutId = workoutSnapshot.getKey();
+                    long timestamp = workoutSnapshot.child("workoutDate").child("time").getValue(Long.class);
+                    double caloriesBurnt = workoutSnapshot.child("caloriesBurnt").getValue(Double.class);
+                    double distance = workoutSnapshot.child("distance").getValue(Double.class);
+                    String type = workoutSnapshot.child("type").getValue(String.class);
+                    long duration = workoutSnapshot.child("workoutDuration").getValue(Long.class);
+                    Date date = new Date(timestamp);
+                    double averageSpeed = workoutSnapshot.child("averageSpeed").getValue(Double.class);
+
+                    String startTime = workoutSnapshot.child("startTime").getValue(String.class);
+                    String endTime = workoutSnapshot.child("endTime").getValue(String.class);
+
+                    WorkoutTracker newWorkout = new WorkoutTracker(type, startTime, endTime, averageSpeed, distance, date, duration, caloriesBurnt);
+
+                    workoutList.add(newWorkout);
                 }
+
+                // Call the callback method with the populated workoutList
+                callback.onWorkoutListFetched(workoutList);
             }
 
             @Override
@@ -78,7 +82,5 @@ public class WorkoutHistory extends AppCompatActivity {
                 // Handle errors
             }
         });
-
-        return workoutList;
     }
 }
