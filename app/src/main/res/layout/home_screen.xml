@@ -11,10 +11,10 @@
         android:id="@+id/quote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="A little progress each day adds up to BIG results."
-        android:textSize="32dp"
-        android:background="@android:color/background_dark"
-        android:textColor="@android:color/holo_orange_dark"
+        android:textColor="#555555"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:typeface="sans"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 

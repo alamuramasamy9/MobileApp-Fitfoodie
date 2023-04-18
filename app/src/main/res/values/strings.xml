@@ -3,6 +3,9 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="profile_picture">Default Profile Picture</string>
+    <string name="start_cycling">Start Cycling</string>
+    <string name="start_running">Start Running</string>
+    <string name="workout_history">Workout History</string>
     <string-array name="gender_options">
         <item>Male</item>
         <item>Female</item>
