@@ -52,13 +52,13 @@ public class Cycling extends CyclingVariables implements LocationListener {
         distanceView = findViewById(R.id.distance_attribute);
         timeView = findViewById(R.id.time_attribute);
         averageSpeedView = findViewById(R.id.average_attribute);
-        endRunning = findViewById(R.id.end_attribute);
-        endRunning.setOnClickListener(new InnerEndCyclingListener(this));
+        endCycling = findViewById(R.id.end_attribute);
+        endCycling.setOnClickListener(new InnerEndCyclingListener(this));
         Log.println(Log.ASSERT, "ST", String.valueOf(startTime));
 
-        workoutObject = new WorkoutTracker("RUNNING", String.valueOf(startTime), String.valueOf(endTime), avgSpeed, distance, workoutDate, 0, 0);
+        workoutObject = new WorkoutTracker("CYCLING", String.valueOf(startTime), String.valueOf(endTime), avgSpeed, distance, workoutDate, 0, 0);
 
-        endRunning.setOnClickListener(new InnerEndCyclingListener(this));
+        endCycling.setOnClickListener(new InnerEndCyclingListener(this));
 
         if (savedInstanceState != null) {
             distance = savedInstanceState.getDouble(distance_key);
@@ -99,7 +99,7 @@ public class Cycling extends CyclingVariables implements LocationListener {
             } else {
                 new AlertDialog.Builder(this)
                         .setTitle("Location Permission Denied")
-                        .setMessage("This app needs location permission to track your running activity")
+                        .setMessage("This app needs location permission to track your cycling activity")
                         .setPositiveButton("OK", (dialog, which) -> finish())
                         .show();
             }
@@ -116,7 +116,7 @@ public class Cycling extends CyclingVariables implements LocationListener {
     public void onBackPressed(){
         new AlertDialog.Builder(this)
                 .setTitle("Exit Pressed")
-                .setMessage("Current Running Session will be marked completed. Are you sure?")
+                .setMessage("Current Cycling Session will be marked completed. Are you sure?")
                 .setPositiveButton("Yes", ((dialog, which) -> {
                     InnerEndCyclingListener listener = new InnerEndCyclingListener(this);
                     listener.onClick(null); // pass a null view to onClick method

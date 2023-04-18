@@ -31,7 +31,7 @@ public class CyclingVariables extends AppCompatActivity {
     TextView distanceView;
     TextView timeView;
     TextView averageSpeedView;
-    Button endRunning;
+    Button endCycling;
 
     Button resetButton;
 
