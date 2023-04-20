@@ -6,6 +6,11 @@
     <string name="start_cycling">Start Cycling</string>
     <string name="start_running">Start Running</string>
     <string name="workout_history">Workout History</string>
+    <string name="food_name">FOOD CONSUMED</string>
+    <string name="food_quantity">QUANTITY CONSUMED</string>
+    <string name="calorie_count">TOTAL CALORIE CONSUMED</string>
+    <string name="fat_count">TOTAL FAT CONSUMED</string>
+    <string name="protein_count">TOTAL PROTEIN CONSUMED</string>
     <string-array name="gender_options">
         <item>Male</item>
         <item>Female</item>

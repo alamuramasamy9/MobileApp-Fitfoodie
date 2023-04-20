@@ -63,7 +63,7 @@ public class SignInActivity extends AppCompatActivity {
                     //DatabaseReference requestedUser = databaseReference.child("Users").child("apurvakhatri");
 
 
-                    requestedUser.addValueEventListener(new ValueEventListener() {
+                    requestedUser.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()) {
@@ -88,6 +88,7 @@ public class SignInActivity extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
+
 
                 });
 

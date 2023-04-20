@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,6 +61,7 @@ public class LogView extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         TextView totalCalories = findViewById(R.id.TotalCaloriesTV);
+        TextView NoDataTV = findViewById(R.id.NoDataTV);
 
 
         nutrition_ref.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -70,46 +72,40 @@ public class LogView extends AppCompatActivity {
                 }
                 else {
                     Map<String, Object> result = (Map<String, Object>) task.getResult().getValue();
-                    Iterator hmIterator = result.entrySet().iterator();
-                    while (hmIterator.hasNext()) {
-                        Map.Entry mapElement
-                                = (Map.Entry)hmIterator.next();
-                        // Printing mark corresponding to string entries
-//                        Log.d("firebase",mapElement.getKey() + " : "
-//                                + mapElement.getValue());
-                        Map<String, Object> value = (Map<String, Object>) mapElement.getValue();
-                        Map<String, Object> final_value = (Map<String, Object>) value.get("nameValuePairs");
-                        names.add(StringUtils.capitalize(final_value.get("name").toString().toLowerCase()));
-                        calories.add(Double.parseDouble(final_value.get("calories").toString()));
-
+                    if(result == null){
+                        mRecyclerView.setVisibility(View.INVISIBLE);
+                        NoDataTV.setVisibility(View.VISIBLE);
                     }
-                    Log.d("firebase", names.toString());
-                    Log.d("firebase", calories.toString());
-//                    Log.d("firebase", String.valueOf(calories.stream().mapToDouble(a -> a).sum()));
-                    totalCalories.setText("Total Calories: "+String.valueOf(calories.stream().mapToDouble(a -> a).sum()));
+                    else{
+                        NoDataTV.setVisibility(View.GONE);
+                        Iterator hmIterator = result.entrySet().iterator();
+                        while (hmIterator.hasNext()) {
+                            Map.Entry mapElement
+                                    = (Map.Entry)hmIterator.next();
+                            Map<String, Object> value = (Map<String, Object>) mapElement.getValue();
+                            Map<String, Object> final_value = (Map<String, Object>) value.get("nameValuePairs");
+                            names.add(StringUtils.capitalize(final_value.get("name").toString().toLowerCase()));
+                            calories.add(Double.parseDouble(final_value.get("calories").toString()));
 
-//                    Log.d("firebase", result.toString());
+                        }
+                        Log.d("firebase", names.toString());
+                        Log.d("firebase", calories.toString());
+                        totalCalories.setText("Total Calories: "+String.valueOf(calories.stream().mapToDouble(a -> a).sum()));
 
-                    mLayoutManager = new LinearLayoutManager(mRecyclerView.getContext());
-                    DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
-                            mLayoutManager.getOrientation());
-                    mRecyclerView.addItemDecoration(dividerItemDecoration);
-                    mRecyclerView.setLayoutManager(mLayoutManager);
 
-                    mAdapter = new CustomAdapter(names, calories);
-                    // Set CustomAdapter as the adapter for RecyclerView.
-                    mRecyclerView.setAdapter(mAdapter);
+                        mLayoutManager = new LinearLayoutManager(mRecyclerView.getContext());
+                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                                mLayoutManager.getOrientation());
+                        mRecyclerView.addItemDecoration(dividerItemDecoration);
+                        mRecyclerView.setLayoutManager(mLayoutManager);
+
+                        mAdapter = new CustomAdapter(names, calories);
+                        mRecyclerView.setAdapter(mAdapter);
+                    }
+
                 }
             }
         });
-
-
-
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
-
-        // END_INCLUDE(initializeRecyclerView)
     }
 
 }
