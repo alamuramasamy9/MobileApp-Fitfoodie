@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">FitFoodie</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="profile_picture">Default Profile Picture</string>
+    <string name="start_cycling">Start Cycling</string>
+    <string name="start_running">Start Running</string>
+    <string name="workout_history">Workout History</string>
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string-array name="goal_options">
+        <item>Gain</item>
+        <item>Loose</item>
+        <item>Maintain</item>
+    </string-array>
+    <string-array name="activity_options">
+        <item>Beginner (1–2 days a week)</item>
+        <item>Intermediate (3–5 days a week)</item>
+        <item>Advance (5–7 days a week)</item>
+    </string-array>
+</resources>

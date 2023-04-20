@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gender"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUpActivity">
+
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sign_up_form_background" />
+
+    <ImageView
+        android:id="@+id/profile_image_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/default_profile_picture"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/profile_picture" />
+
+    <Button
+        android:id="@+id/upload_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Picture"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image_view"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/tv_image_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/upload_button"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/username_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_image_preview"
+        android:layout_marginTop="28dp"
+        android:layout_marginStart="16dp" />
+
+    <EditText
+        android:id="@+id/username_edit_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="mikeoffice"
+        app:layout_constraintStart_toEndOf="@+id/username_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/username_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/username_text_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/username_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/username_text_view"
+        android:layout_marginTop="28dp" />
+
+    <EditText
+        android:id="@+id/name_edit_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Apurva Khatri"
+        app:layout_constraintStart_toEndOf="@+id/name_text_view"
+        app:layout_constraintEnd_toEndOf="@+id/username_edit_view"
+        app:layout_constraintTop_toTopOf="@+id/name_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/name_text_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/age_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Age:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/name_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/name_text_view"
+        android:layout_marginTop="28dp" />
+
+    <EditText
+        android:id="@+id/age_edit_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="25"
+        app:layout_constraintStart_toEndOf="@+id/age_text_view"
+        app:layout_constraintEnd_toEndOf="@+id/name_edit_view"
+        app:layout_constraintTop_toTopOf="@+id/age_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/age_text_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/gender_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gender:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/name_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/age_text_view"
+        android:layout_marginTop="28dp" />
+
+    <Spinner
+        android:id="@+id/gender_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/gender_text_view"
+        app:layout_constraintEnd_toEndOf="@+id/name_edit_view"
+        app:layout_constraintTop_toTopOf="@+id/gender_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/gender_text_view"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/height_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Height (cms):"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/name_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/gender_text_view" />
+
+    <EditText
+        android:id="@+id/height_edit_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="165"
+        app:layout_constraintStart_toEndOf="@+id/height_text_view"
+        app:layout_constraintEnd_toEndOf="@+id/name_edit_view"
+        app:layout_constraintTop_toTopOf="@+id/height_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/height_text_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/weight_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:textSize="20sp"
+        android:text="Weight (kgs):"
+        app:layout_constraintTop_toBottomOf="@+id/height_text_view"
+        app:layout_constraintStart_toStartOf="@id/name_text_view" />
+
+    <EditText
+        android:id="@+id/weight_edit_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="165"
+        app:layout_constraintStart_toEndOf="@+id/weight_text_view"
+        app:layout_constraintEnd_toEndOf="@+id/name_edit_view"
+        app:layout_constraintTop_toTopOf="@+id/weight_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/weight_text_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/calorie_target_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calorie Target (Kcals):"
+        android:layout_marginTop="28dp"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/weight_text_view"
+        app:layout_constraintStart_toStartOf="@id/name_text_view" />
+
+    <EditText
+        android:id="@+id/calorie_target_edit_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="2000"
+        app:layout_constraintStart_toEndOf="@+id/calorie_target_text_view"
+        app:layout_constraintEnd_toEndOf="@+id/name_edit_view"
+        app:layout_constraintTop_toTopOf="@+id/calorie_target_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/calorie_target_text_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/goal_type_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weight Goal:"
+        android:layout_marginTop="28dp"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/calorie_target_text_view"
+        app:layout_constraintStart_toStartOf="@id/name_text_view" />
+
+    <Spinner
+        android:id="@+id/goal_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/goal_type_text_view"
+        app:layout_constraintEnd_toEndOf="@+id/name_edit_view"
+        app:layout_constraintTop_toTopOf="@+id/goal_type_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/goal_type_text_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        />
+
+    <TextView
+        android:id="@+id/activity_type_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activity:"
+        android:layout_marginTop="28dp"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/goal_type_text_view"
+        app:layout_constraintStart_toStartOf="@id/name_text_view" />
+
+    <Spinner
+        android:id="@+id/activity_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/activity_type_text_view"
+        app:layout_constraintEnd_toEndOf="@+id/name_edit_view"
+        app:layout_constraintTop_toTopOf="@+id/activity_type_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/activity_type_text_view"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        />
+
+    <Button
+        android:id="@+id/sign_up_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:onClick="signUp"
+        app:layout_constraintTop_toBottomOf="@id/activity_type_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
