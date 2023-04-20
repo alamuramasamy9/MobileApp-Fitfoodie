@@ -83,13 +83,7 @@ public class DietTwo extends AppCompatActivity {
         System.out.println("USER NAME IS: " + userid);
 
 
-
-
-        submitButtonAfterProvidingInfo.setOnClickListener(view ->
-        {
-
-
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
 //            FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
 //            String uid1 = user1.getUid();
@@ -98,102 +92,102 @@ public class DietTwo extends AppCompatActivity {
 
 //            mAuth = FirebaseAuth.getInstance();
 //            String id = String.valueOf(mAuth.getCurrentUser());
-            DatabaseReference nutrition_ref = databaseReference.child("Users").child(userid).child("nutrition");
+        DatabaseReference nutrition_ref = databaseReference.child("Users").child(userid).child("nutrition");
 
 
 
-            String xword = foodConsumed.getText().toString();
-            String yword = quantityOfFoodConsumed.getText().toString();
-            String selected = yword + " " +xword;
-            System.out.println("QUERY STRING: " +selected);
+        String xword = foodConsumed.getText().toString();
+        String yword = quantityOfFoodConsumed.getText().toString();
+        String selected = yword + " " +xword;
+        System.out.println("QUERY STRING: " +selected);
 
-            String urlString = "https://api.api-ninjas.com/v1/nutrition?query=" + selected;
-            Handler handler = new Handler();
-            List<FoodItem> foods = new ArrayList<>();
-            Thread network = new Thread(() -> {
-
-
-                try{
-                    String apiKey = "ycVFyqdxalYZNhflfRMpT318qctIPovNO6LlPmqo";
-                    URL url = new URL(urlString);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestProperty("X-Api-Key", apiKey);
-                    connection.setRequestMethod("GET");
-                    connection.setDoInput(true);
-                    connection.connect();
-
-                    InputStream inputStream = connection.getInputStream();
-
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    String line;
-                    StringBuilder response = new StringBuilder();
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
+        String urlString = "https://api.api-ninjas.com/v1/nutrition?query=" + selected;
+        Handler handler = new Handler();
+        List<FoodItem> foods = new ArrayList<>();
+        Thread network = new Thread(() -> {
 
 
-                    reader.close();
-                    String result = response.toString();
-                    System.out.println("RESULT:" + result);
+            try{
+                String apiKey = "ycVFyqdxalYZNhflfRMpT318qctIPovNO6LlPmqo";
+                URL url = new URL(urlString);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("X-Api-Key", apiKey);
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);
+                connection.connect();
 
-                    JSONArray jsonArray = new JSONArray(result);
+                InputStream inputStream = connection.getInputStream();
 
-                    JSONObject responseJSON = new JSONObject();
-                    responseJSON.put("foods", jsonArray);
-                    System.out.println("JSON ARRAY: " +jsonArray);
-
-
-
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-
-
-                        Gson gson = new Gson();
-                        String jsonString = gson.toJson(jsonObject);
-                        Map<String, Object> jsonMap = new Gson().fromJson(jsonString, new TypeToken<HashMap<String, Object>>() {
-                        }.getType());
-                        System.out.println("JSON MAP: " +jsonMap);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
 
 
-                        String pattern = "dd-MM-yyyy";
-                        String dateInString =new SimpleDateFormat(pattern).format(new Date());
-                        Calendar calendar = Calendar.getInstance();
-                        nutrition_ref.child(String.valueOf(dateInString)).child(String.valueOf(calendar.getTime())).setValue(jsonMap);
+                reader.close();
+                String result = response.toString();
+                System.out.println("RESULT:" + result);
+
+                JSONArray jsonArray = new JSONArray(result);
+
+                JSONObject responseJSON = new JSONObject();
+                responseJSON.put("foods", jsonArray);
+                System.out.println("JSON ARRAY: " +jsonArray);
 
 
 
 
-
-                        // Create FoodItem object from JSON object
-                        FoodItem foodItem = new FoodItem();
-                        foodItem.setName(jsonObject.getString("name"));
-                        foodItem.setCalories(jsonObject.getDouble("calories"));
-                        foodItem.setServingSize(jsonObject.getDouble("serving_size_g"));
-                        foodItem.setTotalFat(jsonObject.getDouble("fat_total_g"));
-                        foodItem.setSaturatedFat(jsonObject.getDouble("fat_saturated_g"));
-                        foodItem.setProtein(jsonObject.getDouble("protein_g"));
-                        foodItem.setSodium(jsonObject.getInt("sodium_mg"));
-                        foodItem.setPotassium(jsonObject.getInt("potassium_mg"));
-                        foodItem.setCholesterol(jsonObject.getInt("cholesterol_mg"));
-                        foodItem.setTotalCarbohydrates(jsonObject.getDouble("carbohydrates_total_g"));
-                        foodItem.setDietaryFiber(jsonObject.getDouble("fiber_g"));
-                        foodItem.setSugars(jsonObject.getDouble("sugar_g"));
-
-                        foods.add(foodItem);
-                    }
-
-                    String itemNames = "ITEMS: " + foods.stream().map(FoodItem::getName).collect(Collectors.joining(", "));
-                    String quantity = "QUAN: " + foods.stream().mapToDouble(FoodItem::getServingSize).sum();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
 
 
-                    double totalCalories = foods.stream().mapToDouble(FoodItem::getCalories).sum();
-                    double totalFat = foods.stream().mapToDouble(FoodItem::getTotalFat).sum();
-                    double totalProtein = foods.stream().mapToDouble(FoodItem::getProtein).sum();
+
+                    Gson gson = new Gson();
+                    String jsonString = gson.toJson(jsonObject);
+                    Map<String, Object> jsonMap = new Gson().fromJson(jsonString, new TypeToken<HashMap<String, Object>>() {
+                    }.getType());
+                    System.out.println("JSON MAP: " +jsonMap);
 
 
-                    System.out.println("REACHED UPDATE UI");
+                    String pattern = "dd-MM-yyyy";
+                    String dateInString =new SimpleDateFormat(pattern).format(new Date());
+                    Calendar calendar = Calendar.getInstance();
+                    nutrition_ref.child(String.valueOf(dateInString)).child(String.valueOf(calendar.getTime())).setValue(jsonMap);
+
+
+
+
+
+                    // Create FoodItem object from JSON object
+                    FoodItem foodItem = new FoodItem();
+                    foodItem.setName(jsonObject.getString("name"));
+                    foodItem.setCalories(jsonObject.getDouble("calories"));
+                    foodItem.setServingSize(jsonObject.getDouble("serving_size_g"));
+                    foodItem.setTotalFat(jsonObject.getDouble("fat_total_g"));
+                    foodItem.setSaturatedFat(jsonObject.getDouble("fat_saturated_g"));
+                    foodItem.setProtein(jsonObject.getDouble("protein_g"));
+                    foodItem.setSodium(jsonObject.getInt("sodium_mg"));
+                    foodItem.setPotassium(jsonObject.getInt("potassium_mg"));
+                    foodItem.setCholesterol(jsonObject.getInt("cholesterol_mg"));
+                    foodItem.setTotalCarbohydrates(jsonObject.getDouble("carbohydrates_total_g"));
+                    foodItem.setDietaryFiber(jsonObject.getDouble("fiber_g"));
+                    foodItem.setSugars(jsonObject.getDouble("sugar_g"));
+
+                    foods.add(foodItem);
+                }
+
+                String itemNames = "ITEMS: " + foods.stream().map(FoodItem::getName).collect(Collectors.joining(", "));
+                String quantity = "QUAN: " + foods.stream().mapToDouble(FoodItem::getServingSize).sum();
+
+
+                double totalCalories = foods.stream().mapToDouble(FoodItem::getCalories).sum();
+                double totalFat = foods.stream().mapToDouble(FoodItem::getTotalFat).sum();
+                double totalProtein = foods.stream().mapToDouble(FoodItem::getProtein).sum();
+
+
+                System.out.println("REACHED UPDATE UI");
 //                    updateUI(itemNames, quantity, totalCalories, totalFat, totalProtein);
 //                    handler.post(new Runnable() {
 //                        public void run()
@@ -212,30 +206,34 @@ public class DietTwo extends AppCompatActivity {
 //                        }
 //                    });
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        submitButtonAfterProvidingInfo.setOnClickListener(view ->
+        {
+
             network.start();
-            try {
-                network.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            for(FoodItem item: foods){
-                String itemNames = "ITEMS: " + foods.stream().map(FoodItem::getName).collect(Collectors.joining(", "));
-                String quantity = "QUAN: " + foods.stream().mapToDouble(FoodItem::getServingSize).sum();
-
-
-                double totalCalories = foods.stream().mapToDouble(FoodItem::getCalories).sum();
-                double totalFat = foods.stream().mapToDouble(FoodItem::getTotalFat).sum();
-                double totalProtein = foods.stream().mapToDouble(FoodItem::getProtein).sum();
-                foodName.setText(itemNames);
-                foodQuantity.setText(quantity);
-                caloriesConsumed.setText("TC: " +String.format("%.1f", totalCalories));
-                fatConsumed.setText("FC: " +String.format("%.1f", totalFat));
-                proteinConsumed.setText("PC: "+String.format("%.1f", totalProtein));
-            }
+//            try {
+//                network.join();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//            for(FoodItem item: foods){
+//                String itemNames = "ITEMS: " + foods.stream().map(FoodItem::getName).collect(Collectors.joining(", "));
+//                String quantity = "QUAN: " + foods.stream().mapToDouble(FoodItem::getServingSize).sum();
+//
+//
+//                double totalCalories = foods.stream().mapToDouble(FoodItem::getCalories).sum();
+//                double totalFat = foods.stream().mapToDouble(FoodItem::getTotalFat).sum();
+//                double totalProtein = foods.stream().mapToDouble(FoodItem::getProtein).sum();
+//                foodName.setText(itemNames);
+//                foodQuantity.setText(quantity);
+//                caloriesConsumed.setText("TC: " +String.format("%.1f", totalCalories));
+//                fatConsumed.setText("FC: " +String.format("%.1f", totalFat));
+//                proteinConsumed.setText("PC: "+String.format("%.1f", totalProtein));
+//            }
         });
     }
 
