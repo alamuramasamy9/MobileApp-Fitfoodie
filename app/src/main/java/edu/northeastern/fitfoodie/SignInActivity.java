@@ -54,6 +54,7 @@ public class SignInActivity extends AppCompatActivity {
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
                     DatabaseReference usersRef = databaseReference.child("Users");
 
+
                     /** Below commented code should actually work, but just to test I added code below below*/
                     DatabaseReference requestedUser = usersRef.child(usernameView.getText().toString());
                     /** Attempt with invalid credentials below*/
@@ -68,7 +69,10 @@ public class SignInActivity extends AppCompatActivity {
                             if (snapshot.exists()) {
                                 Log.println(Log.ASSERT, "Obj", "User with username does exist");
                                 Intent intent = new Intent(SignInActivity.this, Home.class);
+
                                 intent.putExtra("currentUser", usernameView.getText().toString());
+                                intent.putExtra("username", usernameView.getText().toString());
+
                                 startActivity(intent);
                             } else {
                                 Log.println(Log.ASSERT, "Obj", "User with username does not exist");

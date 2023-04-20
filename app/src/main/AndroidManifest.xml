@@ -21,6 +21,12 @@
         android:theme="@style/Theme.FitFoodie"
         tools:targetApi="31">
         <activity
+            android:name=".LogView"
+            android:exported="false" />
+        <activity
+            android:name=".DietTwo"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -42,6 +48,7 @@
         <activity android:name=".Cycling"/>
         <activity android:name=".WorkoutHistory"/>
         <activity android:name=".UserProfile"/>
-    </application>
+        <activity android:name=".DietOne" />
+</application>
 
 </manifest>

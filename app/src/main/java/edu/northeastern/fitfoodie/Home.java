@@ -36,6 +36,16 @@ public class Home extends AppCompatActivity {
             intent.putExtra("currentUser", username);
             startActivity(intent);
         });
+        Button meal_tracker = findViewById(R.id.meal_tracking);
+        Intent oldIntent = getIntent();
+        String userid = oldIntent.getStringExtra("username");
+        meal_tracker.setOnClickListener(view ->
+        {
+            Intent new_intent = new Intent(Home.this, DietOne.class);
+            new_intent.putExtra("username", userid);
+            startActivity(new_intent);
+
+        });
 
 
     }
