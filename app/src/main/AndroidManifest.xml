@@ -40,6 +40,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity android:name=".SignUpActivity"/>
         <activity android:name=".Home"/>
         <activity android:name=".SignUpOnClickListener"/>
@@ -51,15 +52,18 @@
         <activity android:name=".UserProfile"/>
         <activity android:name=".DietOne" />
 
+
         <receiver
             android:name=".MemoBroadcast"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 
+
 </application>
+
 
 </manifest>

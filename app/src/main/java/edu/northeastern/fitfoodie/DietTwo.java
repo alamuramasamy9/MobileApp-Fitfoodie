@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.reflect.TypeToken;
@@ -52,15 +53,16 @@ public class DietTwo extends AppCompatActivity {
     private EditText quantityOfFoodConsumed;
     private Button submitButtonAfterProvidingInfo;
 
+    private TextView toastmessge;
     private TextView foodName;
     private TextView foodQuantity;
     private TextView caloriesConsumed;
     private TextView fatConsumed;
     private TextView proteinConsumed;
 
-    private FirebaseAuth mAuth;
 
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -77,6 +79,7 @@ public class DietTwo extends AppCompatActivity {
         caloriesConsumed = findViewById(R.id.caloriesConsumedTextView);
         fatConsumed = findViewById(R.id.fatConsumedTextView);
         proteinConsumed = findViewById(R.id.proteinConsumedTextView);
+        toastmessge = findViewById(R.id.toastView);
 
 
         Intent intent = getIntent();
@@ -88,13 +91,7 @@ public class DietTwo extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-//            FirebaseUser user1 = FirebaseAuth.getInstance().getCurrentUser();
-//            String uid1 = user1.getUid();
-//            System.out.println("CURRENT USER DETAILS: " +uid1);
 
-
-//            mAuth = FirebaseAuth.getInstance();
-//            String id = String.valueOf(mAuth.getCurrentUser());
         DatabaseReference nutrition_ref = databaseReference.child("Users").child(userid).child("nutrition");
 
 
@@ -104,6 +101,9 @@ public class DietTwo extends AppCompatActivity {
             String yword = quantityOfFoodConsumed.getText().toString();
             String selected = yword + " " + xword;
             System.out.println("QUERY STRING: " + selected);
+
+
+            resetData();
 
             String urlString = "https://api.api-ninjas.com/v1/nutrition?query=" + selected;
             new Thread(() -> {
@@ -135,8 +135,11 @@ public class DietTwo extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(result);
 
                     JSONObject responseJSON = new JSONObject();
+
                     responseJSON.put("foods", jsonArray);
                     System.out.println("JSON ARRAY: " + jsonArray);
+
+
 
 
                     List<FoodItem> foods = new ArrayList<>();
@@ -186,18 +189,42 @@ public class DietTwo extends AppCompatActivity {
 
 
                     System.out.println("REACHED UPDATE UI");
-                    updateUI(itemNames, quantity, totalCalories, totalFat, totalProtein);
+
+                    if(jsonArray.length() == 0) {
+                        UpdateUI2();
+                    }
+                    else {
+                        updateUI(itemNames, quantity, totalCalories, totalFat, totalProtein);
+                    }
 
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
+                } catch (NumberFormatException e) {
+                    //e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Invalid input", Toast.LENGTH_SHORT).show();
                 }
             }).start();
         });
     }
 
+    private void resetData() {
+        toastmessge.setText("");
+        foodQuantity.setText("");
+        foodName.setText("");
+        caloriesConsumed.setText("");
+        fatConsumed.setText("");
+        proteinConsumed.setText("");
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void UpdateUI2() {
+        runOnUiThread(() -> toastmessge.setText("Can you enter a valid food name!!!"));
+    }
+
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void updateUI(String itemNames, String quantity, double totalCalories, double totalFat, double totalProtein) {
 
         runOnUiThread(() -> {
@@ -209,7 +236,6 @@ public class DietTwo extends AppCompatActivity {
             proteinConsumed.setText("PC: " + String.format("%.1f", totalProtein));
 
         });
-
 
     }
 }
