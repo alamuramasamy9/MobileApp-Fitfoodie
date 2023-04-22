@@ -16,15 +16,20 @@
         android:textSize="16sp"
         android:typeface="sans"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/user_profile"
+        />
 
     <Button
         android:id="@+id/user_profile"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="User Profile"
         app:layout_constraintTop_toBottomOf="@+id/quote"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/workout_tracking"
+        app:layout_constraintEnd_toEndOf="@+id/workout_tracking"
+        app:layout_constraintBottom_toTopOf="@id/workout_tracking"
         />
 
     <Button
@@ -32,18 +37,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Workout Tracking"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/meal_tracking"
+        app:layout_constraintTop_toBottomOf="@id/user_profile"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
     />
 
     <Button
         android:id="@+id/meal_tracking"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Meal Tracking"
+        app:layout_constraintTop_toBottomOf="@id/workout_tracking"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/workout_tracking"
+        app:layout_constraintEnd_toEndOf="@id/workout_tracking"
+        app:layout_constraintStart_toStartOf="@+id/workout_tracking"
         />
 
 

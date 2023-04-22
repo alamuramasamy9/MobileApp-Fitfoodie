@@ -72,6 +72,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         this.food_calories = food_calories;
     }
 
+    public void updateList(ArrayList<String> food_names, ArrayList<Double> food_calories) {
+        this.food_names = food_names;
+        this.food_calories = food_calories;
+        notifyDataSetChanged();
+    }
+
     // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
     // Create new views (invoked by the layout manager)
     @Override
