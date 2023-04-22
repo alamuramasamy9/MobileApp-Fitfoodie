@@ -179,8 +179,8 @@ public class DietTwo extends AppCompatActivity {
                         foods.add(foodItem);
                     }
 
-                    String itemNames = "ITEMS: " + foods.stream().map(FoodItem::getName).collect(Collectors.joining(", "));
-                    String quantity = "QUAN: " + foods.stream().mapToDouble(FoodItem::getServingSize).sum();
+                    String itemNames = "Food Consumed: " + foods.stream().map(FoodItem::getName).collect(Collectors.joining(", "));
+                    String quantity = "Quantity of Food Consumed: " + foods.stream().mapToDouble(FoodItem::getServingSize).sum() + " grams";
 
 
                     double totalCalories = foods.stream().mapToDouble(FoodItem::getCalories).sum();
@@ -221,7 +221,7 @@ public class DietTwo extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void UpdateUI2() {
-        runOnUiThread(() -> toastmessge.setText("Can you enter a valid food name!!!"));
+        runOnUiThread(() -> toastmessge.setText("OOPS!!! Please enter a valid Food name and Quantity!"));
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
@@ -231,9 +231,9 @@ public class DietTwo extends AppCompatActivity {
 
             foodName.setText(itemNames);
             foodQuantity.setText(quantity);
-            caloriesConsumed.setText("Total Cal: " + String.format("%.1f", totalCalories));
-            fatConsumed.setText("Fat (C): " + String.format("%.1f", totalFat));
-            proteinConsumed.setText("Protein (C): " + String.format("%.1f", totalProtein));
+            caloriesConsumed.setText("Total Calorie Count: " + String.format("%.1f", totalCalories));
+            fatConsumed.setText("Total Fat Count: " + String.format("%.1f", totalFat));
+            proteinConsumed.setText("Total Protein Count: " + String.format("%.1f", totalProtein));
 
         });
 
