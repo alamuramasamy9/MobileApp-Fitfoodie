@@ -231,9 +231,9 @@ public class DietTwo extends AppCompatActivity {
 
             foodName.setText(itemNames);
             foodQuantity.setText(quantity);
-            caloriesConsumed.setText("TC: " + String.format("%.1f", totalCalories));
-            fatConsumed.setText("FC: " + String.format("%.1f", totalFat));
-            proteinConsumed.setText("PC: " + String.format("%.1f", totalProtein));
+            caloriesConsumed.setText("Total Cal: " + String.format("%.1f", totalCalories));
+            fatConsumed.setText("Fat (C): " + String.format("%.1f", totalFat));
+            proteinConsumed.setText("Protein (C): " + String.format("%.1f", totalProtein));
 
         });
 

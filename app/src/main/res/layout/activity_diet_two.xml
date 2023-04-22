@@ -49,10 +49,10 @@
         android:id="@+id/foodNameConsumedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="36dp"
         android:text="@string/food_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.415"
+        app:layout_constraintHorizontal_bias="0.327"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/submitButton"
         tools:ignore="MissingConstraints" />
@@ -83,10 +83,10 @@
         android:id="@+id/fatConsumedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:text="@string/fat_count"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.368"
+        app:layout_constraintHorizontal_bias="0.384"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/caloriesConsumedTextView" />
 
@@ -97,7 +97,7 @@
         android:layout_marginTop="12dp"
         android:text="@string/protein_count"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
+        app:layout_constraintHorizontal_bias="0.441"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fatConsumedTextView" />
 
@@ -105,8 +105,8 @@
         android:id="@+id/toastView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Toast Message"
-        tools:layout_editor_absoluteX="132dp"
+        android:text=""
+        tools:layout_editor_absoluteX="132p"
         tools:layout_editor_absoluteY="535dp"
         tools:ignore="MissingConstraints" />
 
