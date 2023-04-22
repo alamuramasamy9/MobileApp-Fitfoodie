@@ -64,7 +64,6 @@ public class SignUpOnClickListener extends SignUpActivity implements View.OnClic
         SignUpOnClickListener(){} //Empty Constructor required
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        Map<String, User> users = new HashMap<>();
         DatabaseReference usersRef = databaseReference.child("Users");
 
 
