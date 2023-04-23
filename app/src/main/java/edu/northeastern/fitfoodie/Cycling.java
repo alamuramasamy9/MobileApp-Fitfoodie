@@ -198,7 +198,7 @@ public class Cycling extends CyclingVariables implements LocationListener {
     private Boolean UpdateObject(){
         workoutObject.setEndTime(String.valueOf(Calendar.getInstance().getTime()));
         workoutObject.setDistance(ConvertToKM(distance));
-        workoutObject.setAverageSpeed(getAverageSpeedInString());
+        workoutObject.setAverageSpeed(averageSpeed);
         return true;
     }
     private double ConvertToKM(double distance){ return distance/100;}
