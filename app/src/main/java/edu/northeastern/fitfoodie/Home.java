@@ -50,7 +50,7 @@ public class Home extends AppCompatActivity {
         String userid = oldIntent.getStringExtra("username");
         meal_tracker.setOnClickListener(view -> {
             Intent new_intent = new Intent(Home.this, DietOne.class);
-            new_intent.putExtra("username", userid);
+            new_intent.putExtra("username", username);
             startActivity(new_intent);
         });
     }
