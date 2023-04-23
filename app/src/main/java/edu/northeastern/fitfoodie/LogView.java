@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,8 +58,10 @@ public class LogView extends AppCompatActivity {
     String pattern;
 
 
-//    private static final String dateInString_key = "mmm";
-//    private static final String calender_key = "kkk";
+//private static String LIST_STATE_KEY = "list_key";
+//private Parcelable savedRecyclerLayoutState;
+//private static String BUNDLE_RECYCLER_LAYOUT = "recycler_layout";
+//private ArrayList<Food> foodInstance = new ArrayList<Food>();
 
 
 
@@ -126,7 +130,8 @@ public class LogView extends AppCompatActivity {
 
 //    public void onSaveInstanceState(Bundle outputState) {
 //        super.onSaveInstanceState(outputState);
-//        outputState.putString(calender_key,String.valueOf(calender.getText()));
+//        outputState.putParcelableArrayList(LIST_STATE_KEY, foodInstance);
+//        outputState.putParcelable(BUNDLE_RECYCLER_LAYOUT, RecyclerView.getLayoutManager().onSaveInstanceState());
 //    }
 
     @Override
