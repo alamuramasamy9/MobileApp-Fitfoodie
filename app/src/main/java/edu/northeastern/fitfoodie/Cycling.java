@@ -155,8 +155,9 @@ public class Cycling extends CyclingVariables implements LocationListener {
             return;
         }
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        // Set distance threshold to 1 meter
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, this);
+        // Set distance threshold to 5 meter
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, this);
+
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
