@@ -12,7 +12,7 @@ public class User {
     int age;
     int height;
     int weight;
-    int calorieInTakeTarget;
+    float calorieInTakeTarget;
 
 
 
@@ -24,7 +24,7 @@ public class User {
         //Required empty constructor.
     }
 
-    public User(String username, String name, String gender, String goalType, String activityLevel, int age, int height, int weight, int calorieInTakeTarget, String profilePicUri) {
+    public User(String username, String name, String gender, String goalType, String activityLevel, int age, int height, int weight, float calorieInTakeTarget, String profilePicUri) {
         this.username = username;
         this.name = name;
         this.gender = gender;
@@ -66,7 +66,7 @@ public class User {
         return weight;
     }
 
-    public int getCalorieInTakeTarget() {
+    public float getCalorieInTakeTarget() {
         return calorieInTakeTarget;
     }
 

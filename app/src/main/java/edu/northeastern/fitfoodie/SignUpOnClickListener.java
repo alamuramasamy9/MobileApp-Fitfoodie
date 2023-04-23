@@ -1,6 +1,7 @@
 package edu.northeastern.fitfoodie;
 import static android.content.ContentValues.TAG;
 
+import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
 import android.content.Context;
@@ -149,7 +150,7 @@ public class SignUpOnClickListener extends SignUpActivity implements View.OnClic
                             .age(parseInt(age.getText().toString()))
                             .height(parseInt(height.getText().toString()))
                             .weight(parseInt(weight.getText().toString()))
-                            .calorieInTakeTarget(parseInt(calorieInTakeTarget.getText().toString()))
+                            .calorieInTakeTarget(parseFloat(calorieInTakeTarget.getText().toString()))
                             .workouts(new WorkoutTracker[]{}) //Empty workout initializer
                             .buildUser();
 
