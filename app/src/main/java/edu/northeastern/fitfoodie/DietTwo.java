@@ -60,6 +60,12 @@ public class DietTwo extends AppCompatActivity {
     private TextView fatConsumed;
     private TextView proteinConsumed;
 
+    private static final String foodName_key = "xxx";
+    private static final String foodQuality_key = "aaa";
+    private static final String caloriesConsumed_key = "bbb";
+    private static final String fatConsumed_key = "ccc";
+    private static final String proteinConsumed_key = "ddd";
+    private static final String toastmessage_key = "eee";
 
 
     @SuppressLint("MissingInflatedId")
@@ -81,6 +87,17 @@ public class DietTwo extends AppCompatActivity {
         proteinConsumed = findViewById(R.id.proteinConsumedTextView);
         toastmessge = findViewById(R.id.toastView);
 
+
+
+        if (savedInstanceState != null) {
+            foodName.setText(savedInstanceState.getString("xxx"));
+            foodQuantity.setText(savedInstanceState.getString("aaa"));
+            caloriesConsumed.setText(savedInstanceState.getString("bbb"));
+            fatConsumed.setText(savedInstanceState.getString("ccc"));
+            proteinConsumed.setText(savedInstanceState.getString("ddd"));
+            toastmessge.setText(savedInstanceState.getString("eee"));
+
+        }
 
         Intent intent = getIntent();
         String userid = intent.getStringExtra("username");
@@ -210,6 +227,17 @@ public class DietTwo extends AppCompatActivity {
         });
     }
 
+    public void onSaveInstanceState(Bundle outputState) {
+        super.onSaveInstanceState(outputState);
+        outputState.putString(foodName_key, String.valueOf(foodName.getText()));
+        outputState.putString(foodQuality_key, String.valueOf(foodQuantity.getText()));
+        outputState.putString(caloriesConsumed_key, String.valueOf(caloriesConsumed.getText()));
+        outputState.putString(fatConsumed_key, String.valueOf(fatConsumed.getText()));
+        outputState.putString(proteinConsumed_key, String.valueOf(proteinConsumed.getText()));
+        outputState.putString(toastmessage_key, String.valueOf(toastmessge.getText()));
+
+    }
+
     private void resetData() {
         toastmessge.setText("");
         foodQuantity.setText("");
@@ -218,6 +246,8 @@ public class DietTwo extends AppCompatActivity {
         fatConsumed.setText("");
         proteinConsumed.setText("");
     }
+
+//    private void onSaveInstanceState(Bundle outState)
 
     @SuppressLint("SetTextI18n")
     private void UpdateUI2() {

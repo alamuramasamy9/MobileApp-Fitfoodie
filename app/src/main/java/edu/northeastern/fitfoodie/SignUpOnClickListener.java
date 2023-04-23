@@ -192,6 +192,7 @@ public class SignUpOnClickListener extends SignUpActivity implements View.OnClic
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         // Add the username as an extra to the intent
                         intent.putExtra("currentUser", newUser.getUsername());
+                        intent.putExtra("username", newUser.getUsername());
                         mContext.startActivity(intent);
                     }, 1000); // 3000 milliseconds = 3 seconds
                 }
