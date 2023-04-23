@@ -47,9 +47,11 @@ public class UserProfile extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_FROM_GALLERY = 2;
 
+
     private ImageView profileImageView;
     private Button uploadButton;
-
+    Bitmap imageBitmap;
+    Uri selectedImage;
     TextView username;
     TextView name;
     Spinner gender;
@@ -84,6 +86,8 @@ public class UserProfile extends AppCompatActivity {
     private static final String gender_spinner_position = "spinner_position";
     private static final String goal_spinner_position = "spinner_position";
     private static final String activity_spinner_position = "spinner_position";
+    private static final String KEY_IMAGE_URI = "imageUri";
+    private static final String KEY_IMAGE_BITMAP = "imageBitmap";
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -105,6 +109,21 @@ public class UserProfile extends AppCompatActivity {
         uploadButton = findViewById(R.id.user_profile_upload_button);
         mProfileImageView = profileImageView;
 
+        Log.println(Log.ASSERT, "User", getIntent().getStringExtra("currentUser"));
+        //Setting adapters for spinners
+//        genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_options, android.R.layout.simple_spinner_item);
+//        goalAdapter = ArrayAdapter.createFromResource(this, R.array.goal_options, android.R.layout.simple_spinner_item);
+//        activityAdapter = ArrayAdapter.createFromResource(this, R.array.activity_options, android.R.layout.simple_spinner_item);
+//        gender.setAdapter(genderAdapter);
+//        goalType.setAdapter(goalAdapter);
+//        activityLevel.setAdapter(activityAdapter);
+//
+//        populateForm(getIntent().getStringExtra("currentUser"));
+        username.setFocusable(false);
+        username.setClickable(false);
+        name.setFocusable(false);
+        name.setClickable(false);
+
         if (saveInstanceState != null) {
             username.setText(saveInstanceState.getString("username_key"));
             name.setText(saveInstanceState.getString("name_key"));
@@ -115,21 +134,29 @@ public class UserProfile extends AppCompatActivity {
             gender.setSelection(saveInstanceState.getInt("gender_spinner_position"));
             goalType.setSelection(saveInstanceState.getInt("goal_spinner_position"));
             activityLevel.setSelection(saveInstanceState.getInt("activityLevel_spinner_position"));
-        }
-        Log.println(Log.ASSERT, "User", getIntent().getStringExtra("currentUser"));
-        //Setting adapters for spinners
-        genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_options, android.R.layout.simple_spinner_item);
-        goalAdapter = ArrayAdapter.createFromResource(this, R.array.goal_options, android.R.layout.simple_spinner_item);
-        activityAdapter = ArrayAdapter.createFromResource(this, R.array.activity_options, android.R.layout.simple_spinner_item);
-        gender.setAdapter(genderAdapter);
-        goalType.setAdapter(goalAdapter);
-        activityLevel.setAdapter(activityAdapter);
 
-        populateForm(getIntent().getStringExtra("currentUser"));
-        username.setFocusable(false);
-        username.setClickable(false);
-        name.setFocusable(false);
-        name.setClickable(false);
+            selectedImage = saveInstanceState.getParcelable(KEY_IMAGE_URI);
+            imageBitmap = saveInstanceState.getParcelable(KEY_IMAGE_BITMAP);
+            // Restore the selected image or taken picture
+            if (selectedImage != null) {
+                Glide.with(this).load(selectedImage).into(profileImageView);
+            } else if (imageBitmap != null) {
+                Glide.with(this).load(imageBitmap).into(profileImageView);
+            }
+            mProfileImageView = profileImageView;
+        }
+        else{
+            Log.println(Log.ASSERT, "User", getIntent().getStringExtra("currentUser"));
+            //Setting adapters for spinners
+            genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_options, android.R.layout.simple_spinner_item);
+            goalAdapter = ArrayAdapter.createFromResource(this, R.array.goal_options, android.R.layout.simple_spinner_item);
+            activityAdapter = ArrayAdapter.createFromResource(this, R.array.activity_options, android.R.layout.simple_spinner_item);
+            gender.setAdapter(genderAdapter);
+            goalType.setAdapter(goalAdapter);
+            activityLevel.setAdapter(activityAdapter);
+
+            populateForm(getIntent().getStringExtra("currentUser"));
+        }
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,11 +273,48 @@ public class UserProfile extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outputState){
+        super.onSaveInstanceState(outputState);
+        outputState.putString(username_key, String.valueOf(username.getText()));
+        outputState.putString(name_key, String.valueOf(name.getText()));
+        outputState.putString(age_key, String.valueOf(age.getText()));
+        outputState.putString(height_key, String.valueOf(height.getText()));
+        outputState.putString(weight_key, String.valueOf(weight.getText()));
+        outputState.putString(calorie_key, String.valueOf(calorieInTakeTarget.getText()));
+        outputState.putInt(gender_spinner_position, gender.getSelectedItemPosition());
+        outputState.putInt(goal_spinner_position, goalType.getSelectedItemPosition());
+        outputState.putInt(activity_spinner_position, activityLevel.getSelectedItemPosition());
+
+        outputState.putParcelable(KEY_IMAGE_URI, selectedImage);
+        outputState.putParcelable(KEY_IMAGE_BITMAP, imageBitmap);
+    }
+
     // Open the camera app to take a new picture
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    // Open the gallery to select an image
+    private void dispatchImageFromGalleryIntent() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_IMAGE_FROM_GALLERY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+            Glide.with(this).load(imageBitmap).into(profileImageView);
+        } else if (requestCode == REQUEST_IMAGE_FROM_GALLERY && resultCode == RESULT_OK) {
+            selectedImage = data.getData();
+            Glide.with(this).load(selectedImage).into(profileImageView);
         }
     }
 
