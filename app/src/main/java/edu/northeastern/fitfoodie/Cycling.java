@@ -208,6 +208,10 @@ public class Cycling extends CyclingVariables implements LocationListener {
                         } else {
                             // Handle success
                             Log.d(TAG, "Data saved successfully.");
+                            Intent intent = new Intent(Cycling.this, Workout.class);
+                            intent.putExtra("currentUser", currentUser);
+                            startActivity(intent);
+                            finish();
                         }
                     });
                 }
@@ -217,10 +221,6 @@ public class Cycling extends CyclingVariables implements LocationListener {
                     // Handle error
                 }
             });
-            //TODO: REDIRECT TO WORKOUT SCREEN PROPERLY
-            Intent intent = new Intent(Cycling.this, Workout.class);
-            startActivity(intent);
-            finish();
         }
     }
 

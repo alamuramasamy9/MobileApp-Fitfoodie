@@ -214,6 +214,10 @@ public class Running extends RunningVariables implements LocationListener {
                         } else {
                             // Handle success
                             Log.d(TAG, "Data saved successfully.");
+                            Intent intent = new Intent(Running.this, Workout.class);
+                            intent.putExtra("currentUser", currentUser);
+                            startActivity(intent);
+                            finish();
                         }
                     });
                 }
@@ -223,10 +227,6 @@ public class Running extends RunningVariables implements LocationListener {
                     // Handle error
                 }
             });
-            //TODO: REDIRECT TO WORKOUT SCREEN PROPERLY
-            Intent intent = new Intent(Running.this, Workout.class);
-            startActivity(intent);
-            finish();
         }
     }
 
