@@ -40,7 +40,8 @@
             app:layout_constraintTop_toBottomOf="@+id/user_profile_profile_image_view"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:background="@drawable/rounded_button_background" />
 
         <TextView
             android:id="@+id/user_profile_tv_image_preview"
@@ -258,6 +259,7 @@
             app:layout_constraintTop_toBottomOf="@id/user_profile_activity_type_text_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/rounded_button_background"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

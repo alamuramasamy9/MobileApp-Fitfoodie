@@ -34,7 +34,7 @@
         app:layout_constraintStart_toStartOf="@+id/workout_tracking"
         app:layout_constraintEnd_toEndOf="@+id/workout_tracking"
         app:layout_constraintBottom_toTopOf="@id/workout_tracking"
-        />
+        android:background="@drawable/rounded_button_background" />
 
     <Button
         android:id="@+id/workout_tracking"
@@ -45,6 +45,7 @@
         app:layout_constraintTop_toBottomOf="@id/user_profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/rounded_button_background"
     />
 
     <Button
@@ -56,7 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/workout_tracking"
         app:layout_constraintStart_toStartOf="@+id/workout_tracking"
-        />
+        android:background="@drawable/rounded_button_background" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
