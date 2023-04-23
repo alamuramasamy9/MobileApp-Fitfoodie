@@ -21,6 +21,7 @@ public class Workout extends AppCompatActivity {
             Intent intent = new Intent(Workout.this, Running.class);
             intent.putExtra("currentUser", username);
             startActivity(intent);
+            finish();
         });
 
         Button cyclingWorkout = findViewById(R.id.cycling_workout);
@@ -29,6 +30,7 @@ public class Workout extends AppCompatActivity {
             Intent intent = new Intent(Workout.this, Cycling.class);
             intent.putExtra("currentUser", username);
             startActivity(intent);
+            finish();
         });
 
         Button workoutHistory = findViewById(R.id.workout_history);
@@ -37,6 +39,7 @@ public class Workout extends AppCompatActivity {
             Intent intent = new Intent(Workout.this, WorkoutHistory.class);
             intent.putExtra("currentUser", username);
             startActivity(intent);
+            finish();
         });
 
     }

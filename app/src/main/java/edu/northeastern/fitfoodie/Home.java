@@ -1,11 +1,13 @@
 package edu.northeastern.fitfoodie;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Home extends AppCompatActivity {
@@ -34,6 +36,7 @@ public class Home extends AppCompatActivity {
             Intent intent = new Intent(Home.this, Workout.class);
             intent.putExtra("currentUser", username);
             startActivity(intent);
+            finish();
         });
 
         userProfileButton = findViewById(R.id.user_profile);
@@ -41,6 +44,7 @@ public class Home extends AppCompatActivity {
             Intent intent = new Intent(Home.this, UserProfile.class);
             intent.putExtra("currentUser", username);
             startActivity(intent);
+            finish();
         });
 
         Button meal_tracker = findViewById(R.id.meal_tracking);
@@ -50,7 +54,32 @@ public class Home extends AppCompatActivity {
             Intent new_intent = new Intent(Home.this, DietOne.class);
             new_intent.putExtra("username", userid);
             startActivity(new_intent);
+            finish();
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to log out?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Perform logout action here
+                Intent intent = new Intent(Home.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Dismiss the dialog
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
