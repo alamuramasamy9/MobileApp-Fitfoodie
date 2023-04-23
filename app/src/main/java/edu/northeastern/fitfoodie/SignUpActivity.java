@@ -1,7 +1,5 @@
 package edu.northeastern.fitfoodie;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -35,7 +33,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     private ImageView profileImageView;
     private Button uploadButton;
-
+    Uri selectedImage;
+    Bitmap imageBitmap;
     TextView username;
     TextView name;
     Spinner gender;
@@ -62,6 +61,8 @@ public class SignUpActivity extends AppCompatActivity {
     private static final String gender_spinner_position = "spinner_position";
     private static final String goal_spinner_position = "spinner_position";
     private static final String activity_spinner_position = "spinner_position";
+    private static final String KEY_IMAGE_URI = "imageUri";
+    private static final String KEY_IMAGE_BITMAP = "imageBitmap";
 
 
 
@@ -97,6 +98,16 @@ public class SignUpActivity extends AppCompatActivity {
             gender.setSelection(saveInstanceState.getInt("gender_spinner_position"));
             goalType.setSelection(saveInstanceState.getInt("goal_spinner_position"));
             activityLevel.setSelection(saveInstanceState.getInt("activityLevel_spinner_position"));
+
+            selectedImage = saveInstanceState.getParcelable(KEY_IMAGE_URI);
+            imageBitmap = saveInstanceState.getParcelable(KEY_IMAGE_BITMAP);
+            // Restore the selected image or taken picture
+            if (selectedImage != null) {
+                Glide.with(this).load(selectedImage).into(profileImageView);
+            } else if (imageBitmap != null) {
+                Glide.with(this).load(imageBitmap).into(profileImageView);
+            }
+            mProfileImageView = profileImageView;
         }
 
         configureGenderSpinner();
@@ -216,9 +227,55 @@ public class SignUpActivity extends AppCompatActivity {
         outputState.putInt(gender_spinner_position, gender.getSelectedItemPosition());
         outputState.putInt(goal_spinner_position, goalType.getSelectedItemPosition());
         outputState.putInt(activity_spinner_position, activityLevel.getSelectedItemPosition());
+
+        outputState.putParcelable(KEY_IMAGE_URI, selectedImage);
+        outputState.putParcelable(KEY_IMAGE_BITMAP, imageBitmap);
     }
 
+    // Handle permission requests result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            // Check if all permission requests are granted
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent();
+            } else {
+                // Permission request is denied, show a message to the user
+                Toast.makeText(this, "Permission is required to take a picture.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
+    // Open the camera app to take a new picture
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    // Open the gallery to select an image
+    private void dispatchImageFromGalleryIntent() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_IMAGE_FROM_GALLERY);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+            Glide.with(this).load(imageBitmap).into(profileImageView);
+        } else if (requestCode == REQUEST_IMAGE_FROM_GALLERY && resultCode == RESULT_OK) {
+            selectedImage = data.getData();
+            Glide.with(this).load(selectedImage).into(profileImageView);
+        }
+    }
 
     void configureGenderSpinner(){
         ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_options, android.R.layout.simple_spinner_item);
@@ -281,51 +338,6 @@ public class SignUpActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-    }
-
-    // Handle permission requests result
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            // Check if all permission requests are granted
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent();
-            } else {
-                // Permission request is denied, show a message to the user
-                Toast.makeText(this, "Permission is required to take a picture.", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    // Open the camera app to take a new picture
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    // Open the gallery to select an image
-    private void dispatchImageFromGalleryIntent() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQUEST_IMAGE_FROM_GALLERY);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Glide.with(this).load(imageBitmap).into(profileImageView);
-        } else if (requestCode == REQUEST_IMAGE_FROM_GALLERY && resultCode == RESULT_OK) {
-            Uri selectedImage = data.getData();
-            Glide.with(this).load(selectedImage).into(profileImageView);
-        }
     }
 
 

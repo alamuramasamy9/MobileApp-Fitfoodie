@@ -12,16 +12,22 @@ public class Home extends AppCompatActivity {
     private Button workoutButton;
     private Button userProfileButton;
     private TextView quoteView;
+    private String username;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
 
         quoteView = findViewById(R.id.quote);
-        quoteView.setText(fetchQuote());
 
-
-        String username = getIntent().getStringExtra("currentUser");
+        if (savedInstanceState != null) {
+            quoteView.setText(savedInstanceState.getString("quote"));
+            username = savedInstanceState.getString("currentUser");
+        } else {
+            quoteView.setText(fetchQuote());
+            username = getIntent().getStringExtra("currentUser");
+        }
 
         workoutButton = findViewById(R.id.workout_tracking);
         workoutButton.setOnClickListener(v -> {
@@ -36,25 +42,42 @@ public class Home extends AppCompatActivity {
             intent.putExtra("currentUser", username);
             startActivity(intent);
         });
+
         Button meal_tracker = findViewById(R.id.meal_tracking);
         Intent oldIntent = getIntent();
         String userid = oldIntent.getStringExtra("username");
-        meal_tracker.setOnClickListener(view ->
-        {
+        meal_tracker.setOnClickListener(view -> {
             Intent new_intent = new Intent(Home.this, DietOne.class);
             new_intent.putExtra("username", userid);
             startActivity(new_intent);
-
         });
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("quote", quoteView.getText().toString());
+        outState.putString("currentUser", username);
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        quoteView.setText(savedInstanceState.getString("quote"));
+        username = savedInstanceState.getString("currentUser");
     }
 
     private String fetchQuote() {
-        String csv = "A little progress each day adds up to BIG results.," +
-                "The journey to stronger muscles passes through sore muscles.," +
-                "Physical fitness and mental fitness compliment each other. Your body is psychosomatic.," +
-                "If you keep good food in your fridge, you will eat good food.";
+        String csv = "💪 Exercise is a celebration of what your body can do, not a punishment for what you ate. 🏋️‍♀️🍎🙌," +
+                "🔥 You are stronger than you think. 💪🌟🚀," +
+                "🏆 The only limit to our realization of tomorrow will be our doubts of today. 🌅🙏✨," +
+                "💥 Fall in love with the process and the results will come. 🏃‍♂️💦💪," +
+                "👊 You don't have to be great to start, but you have to start to be great. 🌟🚀🙌," +
+                "🌟 Don't stop when you're tired, stop when you're done. 💪🏅😎," +
+                "🌈 Strive for progress, not perfection. 🌟👍👏," +
+                "💯 Fitness is not a destination, it's a journey. 🚶‍♀️🏋️‍♂️🌟," +
+                "🌞 Your body can stand almost anything, it's your mind that you have to convince. 🧠💪🌟," +
+                "🔥 The only bad workout is the one that didn't happen. 🙌💦💪";
         String[] array = csv.split(",");
         int randomIndex = (int) (Math.random() * array.length);
         return array[randomIndex];

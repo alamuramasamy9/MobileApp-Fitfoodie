@@ -14,6 +14,13 @@
         tools:context=".UserProfile">
 
         <ImageView
+            android:id="@+id/preview_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            />
+
+        <ImageView
             android:id="@+id/background_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -30,6 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
             android:scaleType="centerCrop"
+            android:clickable="true"
             android:contentDescription="@string/profile_picture" />
 
         <Button
@@ -40,7 +48,8 @@
             app:layout_constraintTop_toBottomOf="@+id/user_profile_profile_image_view"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:background="@drawable/rounded_button_background" />
 
         <TextView
             android:id="@+id/user_profile_tv_image_preview"
@@ -258,6 +267,7 @@
             app:layout_constraintTop_toBottomOf="@id/user_profile_activity_type_text_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/rounded_button_background"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
