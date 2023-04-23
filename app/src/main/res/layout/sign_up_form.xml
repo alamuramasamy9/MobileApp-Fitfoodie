@@ -40,7 +40,8 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_image_view"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:background="@drawable/rounded_button_background" />
 
     <TextView
         android:id="@+id/tv_image_preview"
@@ -72,7 +73,11 @@
         app:layout_constraintTop_toTopOf="@+id/username_text_view"
         app:layout_constraintBottom_toBottomOf="@+id/username_text_view"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:inputType="text|textNoSuggestions|textVisiblePassword"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        android:maxLines="1"
+        android:maxLength="20" />
 
     <TextView
         android:id="@+id/name_text_view"
@@ -94,7 +99,9 @@
         app:layout_constraintTop_toTopOf="@+id/name_text_view"
         app:layout_constraintBottom_toBottomOf="@+id/name_text_view"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ "
+        android:maxLength="30"/>
 
     <TextView
         android:id="@+id/age_text_view"
@@ -116,7 +123,11 @@
         app:layout_constraintTop_toTopOf="@+id/age_text_view"
         app:layout_constraintBottom_toBottomOf="@+id/age_text_view"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:inputType="number"
+        android:maxLength="2"
+        android:maxLines="1"
+        android:digits="0123456789"/>
 
     <TextView
         android:id="@+id/gender_text_view"
@@ -159,7 +170,10 @@
         app:layout_constraintTop_toTopOf="@+id/height_text_view"
         app:layout_constraintBottom_toBottomOf="@+id/height_text_view"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:inputType="number"
+        android:digits="0123456789"
+        android:maxLength="3" />
 
     <TextView
         android:id="@+id/weight_text_view"
@@ -175,13 +189,16 @@
         android:id="@+id/weight_edit_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="165"
+        android:hint="68"
         app:layout_constraintStart_toEndOf="@+id/weight_text_view"
         app:layout_constraintEnd_toEndOf="@+id/name_edit_view"
         app:layout_constraintTop_toTopOf="@+id/weight_text_view"
         app:layout_constraintBottom_toBottomOf="@+id/weight_text_view"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:inputType="number"
+        android:digits="0123456789"
+        android:maxLength="3" />
 
     <TextView
         android:id="@+id/calorie_target_text_view"
@@ -203,7 +220,9 @@
         app:layout_constraintTop_toTopOf="@+id/calorie_target_text_view"
         app:layout_constraintBottom_toBottomOf="@+id/calorie_target_text_view"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:inputType="numberDecimal"
+        android:digits="0123456789." />
 
     <TextView
         android:id="@+id/goal_type_text_view"
@@ -257,6 +276,7 @@
         app:layout_constraintTop_toBottomOf="@id/activity_type_text_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/rounded_button_background"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

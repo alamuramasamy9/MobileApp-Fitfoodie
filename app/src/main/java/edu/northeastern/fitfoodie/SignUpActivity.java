@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -122,7 +123,36 @@ public class SignUpActivity extends AppCompatActivity {
                 calorieInTakeTarget,
                 profileImageView,
                 mContext
-        ));
+        ) {
+            @Override
+            public void onClick(View v) {
+                if (username.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(mContext, "Please enter a username", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (name.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(mContext, "Please enter your name", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (age.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(mContext, "Please enter your age", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (height.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(mContext, "Please enter your height", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (weight.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(mContext, "Please enter your weight", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (calorieInTakeTarget.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(mContext, "Please enter your calorie intake target", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                super.onClick(v);
+            }
+        });
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override

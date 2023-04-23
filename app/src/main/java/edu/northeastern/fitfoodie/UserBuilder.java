@@ -1,7 +1,5 @@
 package edu.northeastern.fitfoodie;
 
-import android.net.Uri;
-
 public class UserBuilder {
     String _username;
     String _name;
@@ -12,7 +10,7 @@ public class UserBuilder {
     int _age;
     int _height;
     int _weight;
-    int _calorieInTakeTarget;
+    float _calorieInTakeTarget;
     String _profilePicUri;
 
 
@@ -64,7 +62,7 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder calorieInTakeTarget(int _calorieInTakeTarget){
+    public UserBuilder calorieInTakeTarget(float _calorieInTakeTarget){
         this._calorieInTakeTarget = _calorieInTakeTarget;
         return this;
     }
