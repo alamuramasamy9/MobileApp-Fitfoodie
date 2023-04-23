@@ -49,7 +49,7 @@ public class WorkoutHistory extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference workoutRef = databaseReference.child("Users").child(username).child("Workouts");
 
-        workoutRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        workoutRef.orderByChild("endTime").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Retrieve the workout data from firebase

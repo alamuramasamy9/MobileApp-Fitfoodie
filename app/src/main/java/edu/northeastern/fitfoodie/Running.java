@@ -72,9 +72,9 @@ public class Running extends RunningVariables implements LocationListener {
 
         if (savedInstanceState != null) {
             distance = savedInstanceState.getDouble(distance_key);
-            distanceView.setText(String.format("Distance Covered: %.2f kms", ConvertToKM(distance)));
+            distanceView.setText(String.format("Distance Covered: %.2f m", ConvertToKM(distance)));
             averageSpeed = savedInstanceState.getDouble(averagespeed_key);
-            averageSpeedView.setText(String.format("Average Speed: %.2f M/H", averageSpeed));
+            averageSpeedView.setText(String.format("Average Speed: %.2f m/s", averageSpeed));
             elapsedTime = savedInstanceState.getLong(timespent_key);
             long seconds = (elapsedTime / 1000) % 60;
             long minutes = (elapsedTime / (1000 * 60)) % 60;
@@ -86,9 +86,9 @@ public class Running extends RunningVariables implements LocationListener {
         resetButton.setOnClickListener(v -> {
             distance = 0.0;
             elapsedTime = 0;
-            distanceView.setText("Distance Covered: 0.00 kms");
+            distanceView.setText("Distance Covered: 0.00 m");
             timeView.setText("Time Spent: 00:00:00");
-            averageSpeedView.setText(String.format("Average Speed: %.2f M/H", 0.0));
+            averageSpeedView.setText(String.format("Average Speed: %.2f m/s", 0.0));
             startTimer();
         });
         timeView.setText("Time Spent: 00:00:00");
@@ -161,25 +161,33 @@ public class Running extends RunningVariables implements LocationListener {
             return;
         }
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        // Set distance threshold to 1 meter
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, this);
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onLocationChanged(@NonNull Location location) {
         if (pointLocation != null) {
+            // Calculate distance traveled between previous and current locations
+            float[] results = new float[1];
+            Location.distanceBetween(pointLocation.getLatitude(), pointLocation.getLongitude(), location.getLatitude(), location.getLongitude(), results);
+            float distanceTraveled = results[0];
+            distance += distanceTraveled;
+
+            // Calculate average speed in m/s
             long timeDiff = (location.getTime() - pointLocation.getTime()) / 1000; // in seconds
-            double distanceInMiles = ConvertToMiles(distance);
-            avgSpeed = distanceInMiles / ((double) timeDiff / 3600);
+            double distanceInMeters = distance;
+            double avgSpeedInMps = distanceInMeters / ((double) timeDiff);
+
+            // Update object and distance view
             UpdateObject();
+            distanceView.setText(String.format("Distance Covered: %.2f m", distance));
+            averageSpeedView.setText(String.format("Average Speed: %.2f m/s", avgSpeedInMps));
         }
         pointLocation = location;
-        distanceView.setText(String.format("Distance Covered: %.2f kms", ConvertToKM(distance)));
-        averageSpeedView.setText(String.format("Average Speed: %.2f M/H", avgSpeed));
-    }
-
-    private double ConvertToMiles(double distanceInMeters) {
-        return distanceInMeters / 1609.344;
+        // Add print statement to display location update
+        System.out.println("Location update: " + location);
     }
 
     @Override
@@ -194,7 +202,7 @@ public class Running extends RunningVariables implements LocationListener {
         workoutObject.setAverageSpeed(getAverageSpeedInString());
         return true;
     }
-    private double ConvertToKM(double distance){ return distance/100;}
+    private double ConvertToKM(double distance){ return distance;}
 
     private double getAverageSpeedInString(){
         long sTInSecs = startTime.getTime()/1000;
@@ -252,10 +260,9 @@ public class Running extends RunningVariables implements LocationListener {
         }
     }
 
-    public static double calculateCaloriesBurnt(double durationInSeconds, double averageSpeedInMph, double distanceInKm, double weightInKg) {
-        // Convert average speed from mph to km/h
-        double averageSpeedInKmh = averageSpeedInMph * 1.60934;
-
+    public static double calculateCaloriesBurnt(double durationInSeconds, double averageSpeedInMps, double distanceInMeters, double weightInKg) {
+        // Convert average speed from m/s to km/h
+        double averageSpeedInKmh = averageSpeedInMps * 3.6;
         // Calculate MET value based on average speed
         double metValue;
         if (averageSpeedInKmh <= 8.0) {
@@ -271,6 +278,7 @@ public class Running extends RunningVariables implements LocationListener {
         // Calculate calories burnt based on duration, distance, and MET value
         double caloriesPerHour = metValue * weightInKg;
         double durationInHours = durationInSeconds / 3600.0;
+        double distanceInKm = distanceInMeters / 1000.0;
         double caloriesBurnt = caloriesPerHour * durationInHours;
 
         // Adjust calories burnt based on distance
@@ -282,7 +290,6 @@ public class Running extends RunningVariables implements LocationListener {
         else {
             return 0;
         }
-
     }
 
     private void startTimer() {

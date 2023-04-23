@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         //NOTIFICATION 1 -----------------------
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,16);
-        calendar.set(Calendar.MINUTE,40);
+        calendar.set(Calendar.HOUR_OF_DAY,9);
+        calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,0);
 
 
