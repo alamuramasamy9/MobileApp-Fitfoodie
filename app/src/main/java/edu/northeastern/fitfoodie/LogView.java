@@ -56,10 +56,21 @@ public class LogView extends AppCompatActivity {
     String pattern;
 
 
+//    private static final String dateInString_key = "mmm";
+//    private static final String calender_key = "kkk";
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_view);
+
+//        if(savedInstanceState != null) {
+//            calender.setText(savedInstanceState.getString("calender_key"));
+//        }
+
+
         initializeViewComponents();
         Intent intent = getIntent();
         String userid = intent.getStringExtra("username");
@@ -110,6 +121,13 @@ public class LogView extends AppCompatActivity {
 
 
     }
+
+
+
+//    public void onSaveInstanceState(Bundle outputState) {
+//        super.onSaveInstanceState(outputState);
+//        outputState.putString(calender_key,String.valueOf(calender.getText()));
+//    }
 
     @Override
     protected void onStart() {

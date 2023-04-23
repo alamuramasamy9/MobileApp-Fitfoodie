@@ -70,6 +70,10 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(saveInstanceState);
         setContentView(R.layout.sign_up_form);
 
+
+
+
+
         username = findViewById(R.id.username_edit_view);
         name =  findViewById(R.id.name_edit_view);
         gender = findViewById(R.id.gender_spinner);
