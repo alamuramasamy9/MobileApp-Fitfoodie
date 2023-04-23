@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -111,12 +113,12 @@ public class UserProfile extends AppCompatActivity {
 
         Log.println(Log.ASSERT, "User", getIntent().getStringExtra("currentUser"));
         //Setting adapters for spinners
-//        genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_options, android.R.layout.simple_spinner_item);
-//        goalAdapter = ArrayAdapter.createFromResource(this, R.array.goal_options, android.R.layout.simple_spinner_item);
-//        activityAdapter = ArrayAdapter.createFromResource(this, R.array.activity_options, android.R.layout.simple_spinner_item);
-//        gender.setAdapter(genderAdapter);
-//        goalType.setAdapter(goalAdapter);
-//        activityLevel.setAdapter(activityAdapter);
+        genderAdapter = ArrayAdapter.createFromResource(this, R.array.gender_options, android.R.layout.simple_spinner_item);
+        goalAdapter = ArrayAdapter.createFromResource(this, R.array.goal_options, android.R.layout.simple_spinner_item);
+        activityAdapter = ArrayAdapter.createFromResource(this, R.array.activity_options, android.R.layout.simple_spinner_item);
+        gender.setAdapter(genderAdapter);
+        goalType.setAdapter(goalAdapter);
+        activityLevel.setAdapter(activityAdapter);
 //
 //        populateForm(getIntent().getStringExtra("currentUser"));
         username.setFocusable(false);
@@ -226,7 +228,7 @@ public class UserProfile extends AppCompatActivity {
                 usersRef.child("activityLevel").setValue(activityLevel.getSelectedItem());
                 usersRef.child("goalType").setValue(goalType.getSelectedItem());
                 usersRef.child("age").setValue(parseInt(age.getText().toString()));
-                usersRef.child("calorieInTakeTarget").setValue(parseInt(calorieInTakeTarget.getText().toString()));
+                usersRef.child("calorieInTakeTarget").setValue(Double.parseDouble(calorieInTakeTarget.getText().toString()));
                 usersRef.child("height").setValue(parseInt(height.getText().toString()));
                 usersRef.child("weight").setValue(parseInt(weight.getText().toString()));
 
@@ -269,6 +271,21 @@ public class UserProfile extends AppCompatActivity {
                     // Handle any errors that may occur while uploading the file
                     Log.e(TAG, "Error uploading file", exception);
                 });
+
+                // Show a success message
+                Snackbar snack = Snackbar.make(v, "User Changes Saved!", Snackbar.LENGTH_LONG).setAction("Action", null);
+                View snackView = snack.getView();
+                TextView mTextView = snackView.findViewById(com.google.android.material.R.id.snackbar_text);
+                mTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                snack.show();
+                new Handler().postDelayed(() -> {
+                    Intent intent = new Intent(mContext, Home.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    // Add the username as an extra to the intent
+                    intent.putExtra("currentUser", username.getText().toString());
+                    mContext.startActivity(intent);
+                }, 1000); // 3000 milliseconds = 3 seconds
+
             }
         });
     }
