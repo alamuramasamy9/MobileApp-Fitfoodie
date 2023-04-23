@@ -36,7 +36,6 @@ public class Home extends AppCompatActivity {
             Intent intent = new Intent(Home.this, Workout.class);
             intent.putExtra("currentUser", username);
             startActivity(intent);
-            finish();
         });
 
         userProfileButton = findViewById(R.id.user_profile);
@@ -44,7 +43,6 @@ public class Home extends AppCompatActivity {
             Intent intent = new Intent(Home.this, UserProfile.class);
             intent.putExtra("currentUser", username);
             startActivity(intent);
-            finish();
         });
 
         Button meal_tracker = findViewById(R.id.meal_tracking);
@@ -54,7 +52,6 @@ public class Home extends AppCompatActivity {
             Intent new_intent = new Intent(Home.this, DietOne.class);
             new_intent.putExtra("username", userid);
             startActivity(new_intent);
-            finish();
         });
     }
 
