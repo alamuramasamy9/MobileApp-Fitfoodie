@@ -36,6 +36,10 @@ public class Cycling extends CyclingVariables implements LocationListener {
     private long elapsedTime = 0;
     private boolean isTimerRunning = false;
 
+    private double distance;
+
+    private double averageSpeed;
+
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -63,6 +67,14 @@ public class Cycling extends CyclingVariables implements LocationListener {
         if (savedInstanceState != null) {
             distance = savedInstanceState.getDouble(distance_key);
             distanceView.setText(String.format("Distance Covered: %.2f kms", ConvertToKM(distance)));
+            averageSpeed = savedInstanceState.getDouble(averagespeed_key);
+            averageSpeedView.setText(String.format("Average Speed: %.2f M/H", averageSpeed));
+            elapsedTime = savedInstanceState.getLong(timespent_key);
+            long seconds = (elapsedTime / 1000) % 60;
+            long minutes = (elapsedTime / (1000 * 60)) % 60;
+            long hours = (elapsedTime / (1000 * 60 * 60)) % 24;
+            String time = String.format("Time Spent: %02d:%02d:%02d", hours, minutes, seconds);
+            timeView.setText(time);
         }
 
         resetButton.setOnClickListener(v -> {
@@ -110,6 +122,16 @@ public class Cycling extends CyclingVariables implements LocationListener {
     public void onSaveInstanceState(Bundle outputState){
         super.onSaveInstanceState(outputState);
         outputState.putDouble(distance_key, distance);
+        outputState.putDouble(averagespeed_key, averageSpeed);
+        outputState.putLong(timespent_key, elapsedTime);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        distance = savedInstanceState.getDouble(distance_key);
+        elapsedTime = savedInstanceState.getLong(timespent_key);
+        averageSpeed = savedInstanceState.getDouble(averagespeed_key);
     }
 
     @Override
